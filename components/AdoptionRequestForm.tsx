@@ -12,6 +12,9 @@ export default function AdoptionRequestForm({ animals, defaultAnimalId }: { anim
   const [applicantName, setApplicantName] = useState('');
   const [contact, setContact] = useState('');
   const [message, setMessage] = useState('');
+  const [housingInfo, setHousingInfo] = useState('');
+  const [incomeInfo, setIncomeInfo] = useState('');
+  const [petExperience, setPetExperience] = useState('');
   const [feedback, setFeedback] = useState('');
   const [isError, setIsError] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -29,7 +32,10 @@ export default function AdoptionRequestForm({ animals, defaultAnimalId }: { anim
           animal_id: Number(animalId),
           applicant_name: applicantName,
           contact,
-          message
+          message,
+          housing_info: housingInfo,
+          income_info: incomeInfo,
+          pet_experience: petExperience
         })
       });
       const data = await res.json().catch(() => null);
@@ -42,6 +48,9 @@ export default function AdoptionRequestForm({ animals, defaultAnimalId }: { anim
       setApplicantName('');
       setContact('');
       setMessage('');
+      setHousingInfo('');
+      setIncomeInfo('');
+      setPetExperience('');
       router.refresh();
     } finally {
       setLoading(false);
@@ -64,6 +73,9 @@ export default function AdoptionRequestForm({ animals, defaultAnimalId }: { anim
         </select>
         <input className="rounded-xl border border-amber-200 px-3 py-2" placeholder="申请人姓名" value={applicantName} onChange={(e) => setApplicantName(e.target.value)} required />
         <input className="rounded-xl border border-amber-200 px-3 py-2 md:col-span-2" placeholder="联系方式（手机/微信）" value={contact} onChange={(e) => setContact(e.target.value)} required />
+        <input className="rounded-xl border border-amber-200 px-3 py-2" placeholder="居住情况（自有/合租）" value={housingInfo} onChange={(e) => setHousingInfo(e.target.value)} required />
+        <input className="rounded-xl border border-amber-200 px-3 py-2" placeholder="收入情况（稳定性说明）" value={incomeInfo} onChange={(e) => setIncomeInfo(e.target.value)} required />
+        <textarea className="rounded-xl border border-amber-200 px-3 py-2 md:col-span-2" rows={3} placeholder="养宠经验（年限、绝育、疫苗等）" value={petExperience} onChange={(e) => setPetExperience(e.target.value)} required />
         <textarea className="rounded-xl border border-amber-200 px-3 py-2 md:col-span-2" rows={4} placeholder="补充说明（养宠经验、居住情况等）" value={message} onChange={(e) => setMessage(e.target.value)} required />
         <button disabled={loading} className="w-fit rounded-xl bg-emerald-600 px-4 py-2 text-sm font-medium text-white disabled:opacity-70">{loading ? '提交中…' : '提交申请'}</button>
       </form>

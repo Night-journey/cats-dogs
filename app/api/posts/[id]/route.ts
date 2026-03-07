@@ -28,3 +28,16 @@ export async function DELETE(_: Request, { params }: { params: { id: string } })
   if (!result.rowCount) return fail('Not found or no permission', 404);
   return ok({ message: 'Deleted' });
 }
+
+export async function PUT(req: Request, { params }: { params: { id: string } }) {
+  const auth = await getAuthFromCookies();
+  if (!auth) return fail('Unauthorized', 401);
+
+  const body = await req.json();
+  const result = await query(
+    'UPDATE posts SET title=$1, content=$2, image_urls=$3 WHERE id=$4 AND (author_id=$5 OR $6=\'admin\') RETURNING *',
+    [body.title, body.content, body.image_urls || [], params.id, auth.userId, auth.role]
+  );
+  if (!result.rowCount) return fail('Not found or no permission', 404);
+  return ok(result.rows[0]);
+}
