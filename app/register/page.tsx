@@ -27,7 +27,7 @@ export default function RegisterPage() {
       const data = await res.json().catch(() => null);
       if (!res.ok) {
         setIsError(true);
-        setMessage(data?.error || '注册失败，请稍后重试');
+        setMessage(data?.message || '注册失败，请稍后重试');
         return;
       }
 

@@ -1,19 +1,22 @@
 'use client';
 
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
-export default function AuthActions({ isLoggedIn, isAdmin }: { isLoggedIn: boolean; isAdmin: boolean }) {
-  const router = useRouter();
+type AuthActionsProps = {
+  isLoggedIn: boolean;
+  isAdmin: boolean;
+  nickname?: string;
+};
+
+export default function AuthActions({ isLoggedIn, isAdmin, nickname }: AuthActionsProps) {
   const [loading, setLoading] = useState(false);
 
   async function handleLogout() {
     setLoading(true);
     try {
       await fetch('/api/auth/logout', { method: 'POST' });
-      router.replace('/');
-      router.refresh();
+      window.location.href = '/';
     } finally {
       setLoading(false);
     }
@@ -30,7 +33,7 @@ export default function AuthActions({ isLoggedIn, isAdmin }: { isLoggedIn: boole
 
   return (
     <div className="ml-auto flex items-center gap-2 text-sm">
-      <span className="rounded-full bg-emerald-100 px-3 py-1 text-emerald-700">已登录</span>
+      <span className="rounded-full bg-emerald-100 px-3 py-1 text-emerald-700">{nickname || (isAdmin ? '管理员' : '已登录用户')}</span>
       {isAdmin ? (
         <Link href="/admin" className="rounded-full px-3 py-1 text-slate-700 transition hover:bg-amber-100 hover:text-amber-900">
           管理后台

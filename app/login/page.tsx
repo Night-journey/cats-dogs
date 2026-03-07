@@ -1,10 +1,8 @@
 'use client';
 
 import { FormEvent, useState } from 'react';
-import { useRouter } from 'next/navigation';
 
 export default function LoginPage() {
-  const router = useRouter();
   const [account, setAccount] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
@@ -26,15 +24,12 @@ export default function LoginPage() {
       const data = await res.json().catch(() => null);
       if (!res.ok) {
         setIsError(true);
-        setMessage(data?.error || '登录失败，请检查账号或密码');
+        setMessage(data?.message || '登录失败，请检查账号或密码');
         return;
       }
 
       setMessage('登录成功，正在跳转...');
-      setTimeout(() => {
-        router.replace(account === 'admin' ? '/admin' : '/');
-        router.refresh();
-      }, 700);
+      window.location.href = account === 'admin' ? '/admin' : '/';
     } finally {
       setLoading(false);
     }
