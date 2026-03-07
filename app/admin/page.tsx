@@ -3,14 +3,14 @@ import Card from '@/components/Card';
 export default function AdminPage() {
   return (
     <div className="space-y-4">
-      <h2 className="text-2xl font-bold">Admin Dashboard</h2>
+      <h2 className="text-2xl font-bold">管理后台</h2>
       <div className="grid gap-4 md:grid-cols-2">
-        <Card title="Animals Management">CRUD for animal profiles and adoption status.</Card>
-        <Card title="Forum Moderation">Review and delete inappropriate posts/comments.</Card>
-        <Card title="Help Requests">Update request status and prioritize urgent needs.</Card>
-        <Card title="Adoption Applications">Approve/reject applications and follow-up contacts.</Card>
-        <Card title="Knowledge Articles">Create/edit rescue guides and emergency info.</Card>
-        <Card title="User Management">Manage users and role permissions.</Card>
+        <Card title="动物管理">对动物档案与领养状态进行增删改查。</Card>
+        <Card title="论坛审核">审核并删除不当帖子或评论。</Card>
+        <Card title="求助信息">更新求助状态并优先处理紧急需求。</Card>
+        <Card title="领养申请">审核/驳回申请并进行后续联系。</Card>
+        <Card title="知识文章">创建或编辑救助指南与应急信息。</Card>
+        <Card title="用户管理">管理用户账号与角色权限。</Card>
       </div>
     </div>
   );

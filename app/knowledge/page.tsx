@@ -7,7 +7,7 @@ export default async function KnowledgePage() {
   const articles = await getArticles();
   return (
     <div>
-      <h2 className="mb-4 text-2xl font-bold">Rescue Knowledge</h2>
+      <h2 className="mb-4 text-2xl font-bold">救助知识</h2>
       <div className="space-y-3">
         {articles.map((a: any) => (
           <a key={a.id} href={`/knowledge/${a.id}`} className="block rounded border bg-white p-4">
