@@ -10,7 +10,7 @@ export async function GET(_: Request, { params }: { params: { id: string } }) {
 
 export async function PUT(req: Request, { params }: { params: { id: string } }) {
   try {
-    requireAdmin();
+    await requireAdmin();
     const body = await req.json();
     const result = await query(
       `UPDATE animals SET avatar_url=$1,name=$2,species=$3,coat_color=$4,gender=$5,age=$6,neutered=$7,location=$8,active_time=$9,personality_tags=$10,description=$11,adoption_status=$12
@@ -40,7 +40,7 @@ export async function PUT(req: Request, { params }: { params: { id: string } }) 
 
 export async function DELETE(_: Request, { params }: { params: { id: string } }) {
   try {
-    requireAdmin();
+    await requireAdmin();
     await query('DELETE FROM animals WHERE id=$1', [params.id]);
     return ok({ message: 'Deleted' });
   } catch {

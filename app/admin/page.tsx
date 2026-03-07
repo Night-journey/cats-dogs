@@ -10,8 +10,8 @@ const adminActions = [
   { title: '知识文章管理', desc: '发布与维护救助知识', href: '/knowledge', emoji: '📚' }
 ];
 
-export default function AdminPage() {
-  const auth = getAuthFromCookies();
+export default async function AdminPage() {
+  const auth = await getAuthFromCookies();
   if (!auth || auth.role !== 'admin') redirect('/login');
 
   return (

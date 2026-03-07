@@ -1,7 +1,7 @@
 import Link from 'next/link';
 
 async function getAnimal(id: string) {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || ''}/api/animals/${id}`, { cache: 'no-store' });
+  const res = await fetch(`/api/animals/${id}`, { cache: 'no-store' });
   return res.json();
 }
 

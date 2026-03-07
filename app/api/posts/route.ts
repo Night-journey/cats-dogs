@@ -15,7 +15,7 @@ export async function GET() {
 
 export async function POST(req: Request) {
   try {
-    const auth = requireAuth();
+    const auth = await requireAuth();
     const body = await req.json();
     const created = await query(
       'INSERT INTO posts(title,content,image_urls,author_id) VALUES($1,$2,$3,$4) RETURNING *',

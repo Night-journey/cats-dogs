@@ -5,7 +5,7 @@ async function getAnimals(searchParams?: { q?: string; species?: string }) {
   if (searchParams?.q) params.set('q', searchParams.q);
   if (searchParams?.species) params.set('species', searchParams.species);
   const query = params.toString();
-  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || ''}/api/animals${query ? `?${query}` : ''}`, { cache: 'no-store' });
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/api/animals${query ? `?${query}` : ''}`, { cache: 'no-store' });
   return res.json();
 }
 

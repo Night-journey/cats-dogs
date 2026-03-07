@@ -9,7 +9,8 @@ module.exports = {
       watch: false,
       max_memory_restart: '500M',
       env: {
-        NODE_ENV: 'production'
+        NODE_ENV: 'production',
+        NEXT_PUBLIC_BASE_URL: 'http://119.29.209.212'
       }
     }
   ]

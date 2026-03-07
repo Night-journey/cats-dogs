@@ -1,13 +1,13 @@
 import { getAuthFromCookies } from './auth';
 
-export function requireAuth() {
-  const auth = getAuthFromCookies();
+export async function requireAuth() {
+  const auth = await getAuthFromCookies();
   if (!auth) throw new Error('Unauthorized');
   return auth;
 }
 
-export function requireAdmin() {
-  const auth = requireAuth();
+export async function requireAdmin() {
+  const auth = await requireAuth();
   if (auth.role !== 'admin') throw new Error('Forbidden');
   return auth;
 }

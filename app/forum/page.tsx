@@ -1,7 +1,7 @@
 import ForumComposer from '@/components/ForumComposer';
 
 async function getPosts() {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || ''}/api/posts`, { cache: 'no-store' });
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/api/posts`, { cache: 'no-store' });
   return res.json();
 }
 

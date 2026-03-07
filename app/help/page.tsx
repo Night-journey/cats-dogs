@@ -3,13 +3,13 @@ import HelpStatusControl from '@/components/HelpStatusControl';
 import { getAuthFromCookies } from '@/lib/auth';
 
 async function getData() {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || ''}/api/help-requests`, { cache: 'no-store' });
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/api/help-requests`, { cache: 'no-store' });
   return res.json();
 }
 
 export default async function HelpPage() {
   const data = await getData();
-  const auth = getAuthFromCookies();
+  const auth = await getAuthFromCookies();
   const isAdmin = auth?.role === 'admin';
 
   return (

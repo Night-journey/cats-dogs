@@ -15,7 +15,8 @@ export default function AuthActions({ isLoggedIn, isAdmin, nickname }: AuthActio
   async function handleLogout() {
     setLoading(true);
     try {
-      await fetch('/api/auth/logout', { method: 'POST' });
+      await fetch('/api/auth/logout', {
+    credentials: 'include',  method: 'POST' });
       window.location.href = '/';
     } finally {
       setLoading(false);

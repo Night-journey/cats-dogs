@@ -22,6 +22,7 @@ export default function AdoptionRequestForm({ animals, defaultAnimalId }: { anim
     setIsError(false);
     try {
       const res = await fetch('/api/adoption-requests', {
+    credentials: 'include', 
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

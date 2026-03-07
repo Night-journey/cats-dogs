@@ -22,7 +22,7 @@ export async function GET(_: Request, { params }: { params: { id: string } }) {
 }
 
 export async function DELETE(_: Request, { params }: { params: { id: string } }) {
-  const auth = getAuthFromCookies();
+  const auth = await getAuthFromCookies();
   if (!auth) return fail('Unauthorized', 401);
   const result = await query('DELETE FROM posts WHERE id=$1 AND (author_id=$2 OR $3 =\'admin\')', [params.id, auth.userId, auth.role]);
   if (!result.rowCount) return fail('Not found or no permission', 404);

@@ -21,7 +21,7 @@ const baseNav = [
 ] as const;
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
-  const auth = getAuthFromCookies();
+  const auth = await getAuthFromCookies();
   const isLoggedIn = Boolean(auth);
   const isAdmin = auth?.role === 'admin';
   let nickname: string | undefined;

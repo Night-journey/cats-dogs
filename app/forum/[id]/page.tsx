@@ -2,7 +2,7 @@ import CommentComposer from '@/components/CommentComposer';
 import PostLikeButton from '@/components/PostLikeButton';
 
 async function getPost(id: string) {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || ''}/api/posts/${id}`, { cache: 'no-store' });
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/api/posts/${id}`, { cache: 'no-store' });
   return res.json();
 }
 

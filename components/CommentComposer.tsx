@@ -16,6 +16,7 @@ export default function CommentComposer({ postId }: { postId: number }) {
     setIsError(false);
     try {
       const res = await fetch('/api/comments', {
+    credentials: 'include', 
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ post_id: postId, content })

@@ -23,10 +23,11 @@ export function verifyToken(token: string): AuthPayload {
 }
 
 export function setAuthCookie(token: string) {
+  // 在生产环境也使用非 secure，因为网站通过 HTTP 访问
   cookies().set('token', token, {
     httpOnly: true,
     sameSite: 'lax',
-    secure: process.env.NODE_ENV === 'production',
+    secure: false,
     path: '/',
     maxAge: 60 * 60 * 24 * 7
   });
@@ -36,8 +37,9 @@ export function clearAuthCookie() {
   cookies().delete('token');
 }
 
-export function getAuthFromCookies() {
-  const token = cookies().get('token')?.value;
+export async function getAuthFromCookies() {
+  const cookieStore = cookies();
+  const token = cookieStore.get('token')?.value;
   if (!token) return null;
   try {
     return verifyToken(token);

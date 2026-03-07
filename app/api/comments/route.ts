@@ -4,7 +4,7 @@ import { requireAuth } from '@/lib/guards';
 
 export async function POST(req: Request) {
   try {
-    const auth = requireAuth();
+    const auth = await requireAuth();
     const body = await req.json();
     const result = await query(
       'INSERT INTO comments(post_id,author_id,content) VALUES($1,$2,$3) RETURNING *',

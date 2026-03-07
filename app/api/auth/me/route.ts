@@ -3,7 +3,7 @@ import { fail, ok } from '@/lib/api';
 import { query } from '@/lib/db';
 
 export async function GET() {
-  const auth = getAuthFromCookies();
+  const auth = await getAuthFromCookies();
   if (!auth) return fail('Unauthorized', 401);
 
   if (auth.role === 'admin' && auth.userId === 0) {

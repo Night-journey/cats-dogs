@@ -25,7 +25,7 @@ export async function GET(req: Request) {
 
 export async function POST(req: Request) {
   try {
-    requireAdmin();
+    await requireAdmin();
     const body = await req.json();
     const result = await query(
       `INSERT INTO animals(avatar_url,name,species,coat_color,gender,age,neutered,location,active_time,personality_tags,description,adoption_status)

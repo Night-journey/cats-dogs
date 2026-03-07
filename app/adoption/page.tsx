@@ -7,19 +7,19 @@ async function getAnimals(searchParams?: { q?: string; species?: string }) {
   if (searchParams?.q) params.set('q', searchParams.q);
   if (searchParams?.species) params.set('species', searchParams.species);
   const query = params.toString();
-  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || ''}/api/animals${query ? `?${query}` : ''}`, { cache: 'no-store' });
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/api/animals${query ? `?${query}` : ''}`, { cache: 'no-store' });
   return res.json();
 }
 
 async function getAdoptionRequests() {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || ''}/api/adoption-requests`, { cache: 'no-store' });
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/api/adoption-requests`, { cache: 'no-store' });
   return res.json();
 }
 
 export default async function AdoptionPage({ searchParams }: { searchParams?: { animalId?: string } }) {
   const animals = await getAnimals();
   const adoptables = animals.filter((a: any) => a.adoption_status !== 'adopted');
-  const auth = getAuthFromCookies();
+  const auth = await getAuthFromCookies();
   const isAdmin = auth?.role === 'admin';
   const requests = isAdmin ? await getAdoptionRequests() : [];
 

@@ -9,7 +9,7 @@ export async function GET(_: Request, { params }: { params: { id: string } }) {
 }
 
 export async function PUT(req: Request, { params }: { params: { id: string } }) {
-  const auth = getAuthFromCookies();
+  const auth = await getAuthFromCookies();
   if (!auth || auth.role !== 'admin') return fail('Forbidden', 403);
   const body = await req.json();
   const updated = await query(
@@ -20,7 +20,7 @@ export async function PUT(req: Request, { params }: { params: { id: string } }) 
 }
 
 export async function DELETE(_: Request, { params }: { params: { id: string } }) {
-  const auth = getAuthFromCookies();
+  const auth = await getAuthFromCookies();
   if (!auth || auth.role !== 'admin') return fail('Forbidden', 403);
   await query('DELETE FROM articles WHERE id=$1', [params.id]);
   return ok({ message: 'Deleted' });

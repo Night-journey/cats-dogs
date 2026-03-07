@@ -12,7 +12,7 @@ export async function GET() {
 }
 
 export async function POST(req: Request) {
-  const auth = getAuthFromCookies();
+  const auth = await getAuthFromCookies();
   if (!auth) return fail('Unauthorized', 401);
   const body = await req.json();
   const created = await query(

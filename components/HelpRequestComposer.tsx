@@ -20,6 +20,7 @@ export default function HelpRequestComposer() {
     setIsError(false);
     try {
       const res = await fetch('/api/help-requests', {
+    credentials: 'include', 
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

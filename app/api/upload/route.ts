@@ -9,7 +9,7 @@ const mapFolder: Record<string, string> = {
 };
 
 export async function POST(req: Request) {
-  const auth = getAuthFromCookies();
+  const auth = await getAuthFromCookies();
   if (!auth) return fail('Unauthorized', 401);
 
   const form = await req.formData();
