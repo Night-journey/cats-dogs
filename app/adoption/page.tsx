@@ -2,6 +2,7 @@ import AdoptionRequestForm from '@/components/AdoptionRequestForm';
 import AdoptionStatusControl from '@/components/AdoptionStatusControl';
 import AdoptionPostComposer from '@/components/AdoptionPostComposer';
 import BlacklistFeedbackComposer from '@/components/BlacklistFeedbackComposer';
+import AdoptionPostStatusControl from '@/components/AdoptionPostStatusControl';
 import { getAuthFromCookies } from '@/lib/auth';
 import { query } from '@/lib/db';
 
@@ -100,6 +101,7 @@ export default async function AdoptionPage({ searchParams }: { searchParams?: { 
             <p className="font-medium text-slate-900">{item.title} · {item.animal_name}</p>
             <p className="text-sm text-slate-600">{item.species} · 状态：{item.status}</p>
             <p className="text-sm text-slate-700">{item.description}</p>
+            {isAdmin ? <AdoptionPostStatusControl id={item.id} current={item.status} /> : null}
           </div>
         ))}
       </section>

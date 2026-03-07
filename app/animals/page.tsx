@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { getAuthFromCookies } from '@/lib/auth';
 
 async function getAnimals(searchParams?: { q?: string; species?: string }) {
   const params = new URLSearchParams();
@@ -10,11 +11,18 @@ async function getAnimals(searchParams?: { q?: string; species?: string }) {
 }
 
 export default async function AnimalsPage({ searchParams }: { searchParams?: { q?: string; species?: string } }) {
-  const animals = await getAnimals(searchParams);
+  const [animals, auth] = await Promise.all([getAnimals(searchParams), getAuthFromCookies()]);
 
   return (
     <div className="space-y-4">
-      <h2 className="text-2xl font-bold text-amber-900">动物图鉴</h2>
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <h2 className="text-2xl font-bold text-amber-900">动物图鉴</h2>
+        {auth?.role === 'admin' ? (
+          <Link href="/animals/new" className="rounded-xl bg-emerald-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-emerald-700">
+            + 增加动物
+          </Link>
+        ) : null}
+      </div>
 
       <form className="grid gap-3 rounded-2xl border border-amber-100 bg-white/90 p-4 shadow-sm md:grid-cols-4" method="GET">
         <input name="q" defaultValue={searchParams?.q || ''} className="rounded-xl border border-amber-200 px-3 py-2 md:col-span-2" placeholder="搜索名称或描述" />
@@ -32,6 +40,7 @@ export default async function AnimalsPage({ searchParams }: { searchParams?: { q
       <div className="grid gap-4 md:grid-cols-2">
         {animals.map((a: any) => (
           <a key={a.id} href={`/animals/${a.id}`} className="rounded-2xl border border-amber-100 bg-white/90 p-4 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md">
+            {a.avatar_url ? <img src={a.avatar_url} alt={a.name} className="mb-3 h-44 w-full rounded-xl object-cover" /> : null}
             <p className="font-semibold text-slate-900">{a.name}</p>
             <p className="text-sm text-amber-700">{a.species} · {a.location}</p>
             <p className="mt-1 text-sm text-slate-700">{a.description}</p>

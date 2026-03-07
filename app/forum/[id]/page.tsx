@@ -14,6 +14,13 @@ export default async function PostDetail({ params }: { params: { id: string } })
       <p className="text-sm text-slate-500">作者：{post.author} · {post.likes_count} 次点赞</p>
       <PostLikeButton postId={post.id} />
       <p>{post.content}</p>
+      {post.image_urls?.length ? (
+        <div className="grid gap-3 md:grid-cols-2">
+          {post.image_urls.map((url: string) => (
+            <img key={url} src={url} alt={post.title} className="h-60 w-full rounded-xl object-cover" />
+          ))}
+        </div>
+      ) : null}
       <div>
         <h3 className="mb-2 font-semibold">评论</h3>
         <CommentComposer postId={post.id} />

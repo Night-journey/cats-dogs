@@ -1,4 +1,6 @@
+import Link from 'next/link';
 import Card from '@/components/Card';
+import { getAuthFromCookies } from '@/lib/auth';
 
 type Article = {
   id: number;
@@ -39,16 +41,24 @@ async function getArticles() {
 }
 
 export default async function KnowledgePage() {
-  const articles: Article[] = await getArticles();
+  const [articles, auth] = await Promise.all([getArticles(), getAuthFromCookies()]);
+  const isAdmin = auth?.role === 'admin';
 
   return (
     <div className="space-y-6">
       <section className="rounded-2xl border border-emerald-100 bg-gradient-to-r from-emerald-50 to-cyan-50 p-6">
-        <p className="mb-2 text-sm font-medium text-emerald-700">校园流浪动物科普</p>
-        <h2 className="mb-2 text-2xl font-bold text-slate-900">遇到受伤动物怎么办？如何正确喂食？</h2>
-        <p className="text-sm text-slate-600">
-          先稳住现场、再判断伤情、及时联系救助。科学喂养和规范记录能显著提升救助成功率。
-        </p>
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <p className="mb-2 text-sm font-medium text-emerald-700">校园流浪动物科普</p>
+            <h2 className="mb-2 text-2xl font-bold text-slate-900">遇到受伤动物怎么办？如何正确喂食？</h2>
+            <p className="text-sm text-slate-600">先稳住现场、再判断伤情、及时联系救助。科学喂养和规范记录能显著提升救助成功率。</p>
+          </div>
+          {isAdmin ? (
+            <Link href="/knowledge/new" className="rounded-xl bg-emerald-600 px-4 py-2 text-sm font-medium text-white hover:bg-emerald-700">
+              + 新增文章
+            </Link>
+          ) : null}
+        </div>
       </section>
 
       <div className="grid gap-4 lg:grid-cols-2">
@@ -80,7 +90,7 @@ export default async function KnowledgePage() {
       <section>
         <h3 className="mb-3 text-xl font-semibold">📚 延伸阅读</h3>
         <div className="space-y-3">
-          {articles.map((article) => (
+          {articles.map((article: Article) => (
             <a
               key={article.id}
               href={`/knowledge/${article.id}`}
