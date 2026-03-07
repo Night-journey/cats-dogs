@@ -3,6 +3,7 @@ import Link from 'next/link';
 import type { Metadata } from 'next';
 import { getAuthFromCookies } from '@/lib/auth';
 import AuthActions from '@/components/AuthActions';
+import { query } from '@/lib/db';
 
 export const metadata: Metadata = {
   title: '校园流浪动物平台',
@@ -19,10 +20,18 @@ const baseNav = [
   ['关于我们', '/about']
 ] as const;
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const auth = getAuthFromCookies();
   const isLoggedIn = Boolean(auth);
   const isAdmin = auth?.role === 'admin';
+  let nickname: string | undefined;
+
+  if (isAdmin) {
+    nickname = '管理员';
+  } else if (auth?.userId) {
+    const user = await query<{ name: string }>('SELECT name FROM users WHERE id=$1', [auth.userId]);
+    nickname = user.rows[0]?.name;
+  }
 
   const nav = isAdmin ? [...baseNav, ['管理后台', '/admin'] as const] : baseNav;
 
@@ -43,7 +52,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 </Link>
               ))}
             </nav>
-            <AuthActions isLoggedIn={isLoggedIn} isAdmin={isAdmin} />
+            <AuthActions isLoggedIn={isLoggedIn} isAdmin={isAdmin} nickname={nickname} />
           </div>
         </header>
         <main className="mx-auto max-w-6xl px-4 py-8">{children}</main>
