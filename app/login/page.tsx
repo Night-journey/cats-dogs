@@ -8,16 +8,36 @@ export default function LoginPage() {
   const [account, setAccount] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
+  const [isError, setIsError] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   async function onSubmit(e: FormEvent) {
     e.preventDefault();
-    const res = await fetch('/api/auth/login', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ account, password })
-    });
-    setMessage(res.ok ? '登录成功，正在进入管理面板…' : '登录失败，请检查账号或密码');
-    if (res.ok) router.push(account === 'admin' ? '/admin' : '/');
+    setLoading(true);
+    setIsError(false);
+
+    try {
+      const res = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ account, password })
+      });
+
+      const data = await res.json().catch(() => null);
+      if (!res.ok) {
+        setIsError(true);
+        setMessage(data?.error || '登录失败，请检查账号或密码');
+        return;
+      }
+
+      setMessage('登录成功，正在跳转...');
+      setTimeout(() => {
+        router.replace(account === 'admin' ? '/admin' : '/');
+        router.refresh();
+      }, 700);
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
@@ -27,9 +47,9 @@ export default function LoginPage() {
           <div className="space-y-4">
             <p className="inline-flex rounded-full bg-white/80 px-3 py-1 text-xs font-medium text-amber-700">校园流浪动物平台</p>
             <h1 className="text-3xl font-bold leading-tight text-amber-900">欢迎回来，<br />一起守护毛孩子</h1>
-            <p className="text-sm leading-6 text-amber-800/80">使用管理员账号即可进入管理界面，快速处理领养、求助与内容审核。</p>
+            <p className="text-sm leading-6 text-amber-800/80">登录后可发布求助、参与论坛互动并跟进领养进度。</p>
           </div>
-          <p className="text-xs text-amber-700/80">管理员账号：admin · 密码：1234</p>
+          <p className="text-xs text-amber-700/80">感谢你加入，一起为校园流浪动物提供温暖支持。</p>
         </section>
 
         <form onSubmit={onSubmit} className="space-y-4 bg-white/80 p-5 backdrop-blur-sm sm:p-8">
@@ -40,9 +60,10 @@ export default function LoginPage() {
             <label className="text-sm font-medium text-slate-700">账号</label>
             <input
               className="w-full rounded-xl border border-amber-200 bg-white px-3 py-2.5 outline-none transition focus:border-amber-400 focus:ring-2 focus:ring-amber-100"
-              placeholder="管理员请输入 admin"
+              placeholder="请输入邮箱或账号"
               value={account}
               onChange={(e) => setAccount(e.target.value)}
+              required
             />
           </div>
 
@@ -54,13 +75,13 @@ export default function LoginPage() {
               placeholder="请输入密码"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              required
             />
           </div>
 
-          <button className="w-full rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 py-2.5 font-medium text-white shadow transition hover:from-amber-600 hover:to-orange-600">登录</button>
+          <button disabled={loading} className="w-full rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 py-2.5 font-medium text-white shadow transition hover:from-amber-600 hover:to-orange-600 disabled:cursor-not-allowed disabled:opacity-70">{loading ? '登录中…' : '登录'}</button>
 
-          <p className="rounded-xl bg-amber-50 px-3 py-2 text-sm text-amber-800">管理员初始账号：admin，密码：1234</p>
-          <p className="min-h-6 text-sm text-slate-700">{message}</p>
+          <p className={`min-h-6 text-sm ${message ? `rounded-lg px-2 py-1 ${isError ? 'bg-rose-50 text-rose-700' : 'bg-emerald-50 text-emerald-700'}` : 'text-slate-500'}`}>{message}</p>
         </form>
       </div>
     </div>
