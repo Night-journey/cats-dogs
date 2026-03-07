@@ -57,6 +57,8 @@ CREATE TABLE IF NOT EXISTS help_requests (
   contact_info TEXT,
   image_urls TEXT[] DEFAULT '{}',
   status VARCHAR(20) NOT NULL DEFAULT 'open',
+  urgent_level INT NOT NULL DEFAULT 0,
+  is_pinned BOOLEAN NOT NULL DEFAULT FALSE,
   author_id INT REFERENCES users(id) ON DELETE SET NULL,
   created_at TIMESTAMP DEFAULT NOW()
 );
@@ -68,6 +70,55 @@ CREATE TABLE IF NOT EXISTS adoption_requests (
   applicant_name VARCHAR(100) NOT NULL,
   contact TEXT NOT NULL,
   message TEXT,
+  housing_info TEXT,
+  income_info TEXT,
+  pet_experience TEXT,
+  agreement_text TEXT,
+  agreement_signed_at TIMESTAMP,
+  status VARCHAR(20) NOT NULL DEFAULT 'pending',
+  created_at TIMESTAMP DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS animal_notes (
+  id SERIAL PRIMARY KEY,
+  animal_id INT REFERENCES animals(id) ON DELETE CASCADE,
+  author_id INT REFERENCES users(id) ON DELETE CASCADE,
+  content TEXT NOT NULL,
+  status VARCHAR(20) NOT NULL DEFAULT 'pending',
+  created_at TIMESTAMP DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS animal_corrections (
+  id SERIAL PRIMARY KEY,
+  animal_id INT REFERENCES animals(id) ON DELETE CASCADE,
+  proposer_id INT REFERENCES users(id) ON DELETE CASCADE,
+  field_name VARCHAR(100),
+  suggested_value TEXT,
+  reason TEXT,
+  status VARCHAR(20) NOT NULL DEFAULT 'pending',
+  created_at TIMESTAMP DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS adoption_posts (
+  id SERIAL PRIMARY KEY,
+  author_id INT REFERENCES users(id) ON DELETE CASCADE,
+  title VARCHAR(200) NOT NULL,
+  animal_name VARCHAR(100) NOT NULL,
+  species VARCHAR(20) NOT NULL CHECK (species IN ('cat', 'dog')),
+  health_info TEXT,
+  description TEXT,
+  contact_info TEXT,
+  status VARCHAR(20) NOT NULL DEFAULT 'pending',
+  created_at TIMESTAMP DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS adoption_blacklist_feedback (
+  id SERIAL PRIMARY KEY,
+  reporter_id INT REFERENCES users(id) ON DELETE CASCADE,
+  suspect_name VARCHAR(100) NOT NULL,
+  contact_info TEXT,
+  reason TEXT NOT NULL,
+  evidence TEXT,
   status VARCHAR(20) NOT NULL DEFAULT 'pending',
   created_at TIMESTAMP DEFAULT NOW()
 );

@@ -15,9 +15,12 @@
 ## 已实现核心功能
 
 - 动物图鉴（浏览、筛选/搜索 API、管理员 CRUD）
+- 动物图鉴用户共建（观察笔记审核、纠错建议提报）
 - 论坛（发帖、点赞、评论）
-- 委托/求助（发布求助、管理员更新状态）
-- 领养申请（提交申请、管理员审批）
+- 论坛个人管理（用户可编辑/删除自己的帖子与评论，管理员可删除违规内容）
+- 委托/求助（发布求助、发布者可更新状态、管理员可置顶/加急/关闭/删除）
+- 领养申请（提交申请、管理员审批、协议文本记录）
+- 送养信息（用户发布，管理员审核）与不良领养人反馈
 - 救助知识（文章浏览、管理员 CRUD）
 - 用户认证（注册/登录/退出，内置单管理员账号）
 - 管理后台页面（管理入口）
@@ -61,9 +64,13 @@
 - 认证：`/api/auth/register`、`/api/auth/login`、`/api/auth/logout`、`/api/auth/me`
 - 动物：`/api/animals`、`/api/animals/:id`
 - 帖子：`/api/posts`、`/api/posts/:id`、`/api/posts/:id/like`
-- 评论：`/api/comments`
+- 评论：`/api/comments`、`/api/comments/:id`
 - 求助：`/api/help-requests`、`/api/help-requests/:id`
 - 领养申请：`/api/adoption-requests`、`/api/adoption-requests/:id`
+- 动物笔记：`/api/animals/:id/notes`、`/api/animal-notes/:id`
+- 动物纠错：`/api/animals/:id/corrections`、`/api/animal-corrections/:id`
+- 送养：`/api/adoption-posts`、`/api/adoption-posts/:id`
+- 黑名单反馈：`/api/adoption-blacklist-feedback`
 - 知识文章：`/api/articles`、`/api/articles/:id`
 - MinIO 上传：`/api/upload`（表单字段 `file` + `kind=animal|post|help`）
 

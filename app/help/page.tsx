@@ -23,7 +23,9 @@ export default async function HelpPage() {
             <p className="text-sm text-amber-700">{r.type} · {r.location} · {r.status}</p>
             <p className="mt-1 text-sm text-slate-700">{r.description}</p>
             <p className="mt-1 text-sm text-slate-600">联系方式：{r.contact_info}</p>
-            {isAdmin ? <HelpStatusControl id={r.id} current={r.status} /> : null}
+            {auth && (isAdmin || auth.userId === r.author_id) ? (
+              <HelpStatusControl id={r.id} current={r.status} isAdmin={Boolean(isAdmin)} urgentLevel={r.urgent_level || 0} pinned={Boolean(r.is_pinned)} />
+            ) : null}
           </div>
         ))}
       </div>
