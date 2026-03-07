@@ -2,6 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  color-scheme: light;
+}
+
 body {
-  @apply bg-slate-50 text-slate-900;
+  @apply min-h-screen bg-gradient-to-b from-amber-50 via-orange-50 to-rose-50 text-slate-800;
+}
+
+::selection {
+  @apply bg-amber-200 text-amber-950;
 }

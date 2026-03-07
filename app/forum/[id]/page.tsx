@@ -1,3 +1,6 @@
+import CommentComposer from '@/components/CommentComposer';
+import PostLikeButton from '@/components/PostLikeButton';
+
 async function getPost(id: string) {
   const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || ''}/api/posts/${id}`, { cache: 'no-store' });
   return res.json();
@@ -9,10 +12,12 @@ export default async function PostDetail({ params }: { params: { id: string } })
     <div className="space-y-4 rounded-xl border bg-white p-6">
       <h2 className="text-2xl font-bold">{post.title}</h2>
       <p className="text-sm text-slate-500">作者：{post.author} · {post.likes_count} 次点赞</p>
+      <PostLikeButton postId={post.id} />
       <p>{post.content}</p>
       <div>
         <h3 className="mb-2 font-semibold">评论</h3>
-        <div className="space-y-2">
+        <CommentComposer postId={post.id} />
+        <div className="mt-3 space-y-2">
           {post.comments?.map((c: any) => (
             <div key={c.id} className="rounded border p-2 text-sm">
               <p className="font-medium">{c.author}</p>

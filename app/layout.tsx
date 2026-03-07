@@ -1,41 +1,49 @@
 import './globals.css';
 import Link from 'next/link';
 import type { Metadata } from 'next';
+import { getAuthFromCookies } from '@/lib/auth';
+import AuthActions from '@/components/AuthActions';
 
 export const metadata: Metadata = {
   title: '校园流浪动物平台',
   description: '一起帮助校园流浪猫狗'
 };
 
-const nav = [
+const baseNav = [
   ['首页', '/'],
   ['动物图鉴', '/animals'],
   ['论坛', '/forum'],
   ['求助', '/help'],
   ['领养', '/adoption'],
   ['科普知识', '/knowledge'],
-  ['关于我们', '/about'],
-  ['管理后台', '/admin']
-];
+  ['关于我们', '/about']
+] as const;
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
+  const auth = getAuthFromCookies();
+  const isLoggedIn = Boolean(auth);
+  const isAdmin = auth?.role === 'admin';
+
+  const nav = isAdmin ? [...baseNav, ['管理后台', '/admin'] as const] : baseNav;
+
   return (
     <html lang="zh-CN">
       <body>
-        <header className="border-b bg-white">
+        <header className="sticky top-0 z-20 border-b border-amber-100 bg-white/85 backdrop-blur-md">
           <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-4 px-4 py-3">
-            <h1 className="font-semibold">校园流浪动物平台</h1>
-            <nav className="flex flex-wrap gap-3 text-sm">
+            <h1 className="rounded-full bg-amber-100 px-3 py-1 text-sm font-semibold text-amber-900">🐾 校园流浪动物平台</h1>
+            <nav className="flex flex-wrap gap-2 text-sm">
               {nav.map(([label, href]) => (
-                <Link key={href} href={href} className="text-slate-600 hover:text-blue-600">
+                <Link
+                  key={href}
+                  href={href}
+                  className="rounded-full px-3 py-1 text-slate-700 transition hover:bg-amber-100 hover:text-amber-900"
+                >
                   {label}
                 </Link>
               ))}
             </nav>
-            <div className="ml-auto flex gap-3 text-sm">
-              <Link href="/login" className="text-slate-600 hover:text-blue-600">登录</Link>
-              <Link href="/register" className="text-slate-600 hover:text-blue-600">注册</Link>
-            </div>
+            <AuthActions isLoggedIn={isLoggedIn} isAdmin={isAdmin} />
           </div>
         </header>
         <main className="mx-auto max-w-6xl px-4 py-8">{children}</main>
