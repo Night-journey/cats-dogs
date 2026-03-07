@@ -8,7 +8,7 @@ export default async function AdoptionPage() {
   const adoptables = animals.filter((a: any) => a.adoption_status !== 'adopted');
   return (
     <div>
-      <h2 className="mb-4 text-2xl font-bold">Adoption</h2>
+      <h2 className="mb-4 text-2xl font-bold">领养专区</h2>
       <div className="grid gap-4 md:grid-cols-2">
         {adoptables.map((a: any) => (
           <div key={a.id} className="rounded border bg-white p-4">

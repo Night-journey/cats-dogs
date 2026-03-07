@@ -9,9 +9,9 @@ export default async function AnimalDetail({ params }: { params: { id: string } 
     <div className="space-y-3 rounded-xl border bg-white p-6">
       <h2 className="text-2xl font-bold">{animal.name}</h2>
       <p>{animal.species} · {animal.gender} · {animal.age}</p>
-      <p>Color: {animal.coat_color} | Neutered: {animal.neutered ? 'Yes' : 'No'}</p>
-      <p>Location: {animal.location} | Active: {animal.active_time}</p>
-      <p>Status: {animal.adoption_status}</p>
+      <p>毛色：{animal.coat_color} | 绝育：{animal.neutered ? '是' : '否'}</p>
+      <p>活动地点：{animal.location} | 活动时间：{animal.active_time}</p>
+      <p>领养状态：{animal.adoption_status}</p>
       <p>{animal.description}</p>
     </div>
   );
