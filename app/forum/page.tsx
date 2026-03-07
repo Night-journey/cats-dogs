@@ -17,6 +17,7 @@ export default async function ForumPage() {
             <h3 className="font-semibold text-slate-900">{p.title}</h3>
             <p className="text-sm text-amber-700">作者：{p.author} · {p.likes_count} 次点赞</p>
             <p className="mt-1 line-clamp-2 text-sm text-slate-700">{p.content}</p>
+            {p.image_urls?.[0] ? <img src={p.image_urls[0]} alt={p.title} className="mt-2 h-44 w-full rounded-xl object-cover" /> : null}
           </a>
         ))}
       </div>
