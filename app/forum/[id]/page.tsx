@@ -8,10 +8,10 @@ export default async function PostDetail({ params }: { params: { id: string } })
   return (
     <div className="space-y-4 rounded-xl border bg-white p-6">
       <h2 className="text-2xl font-bold">{post.title}</h2>
-      <p className="text-sm text-slate-500">By {post.author} · {post.likes_count} likes</p>
+      <p className="text-sm text-slate-500">作者：{post.author} · {post.likes_count} 次点赞</p>
       <p>{post.content}</p>
       <div>
-        <h3 className="mb-2 font-semibold">Comments</h3>
+        <h3 className="mb-2 font-semibold">评论</h3>
         <div className="space-y-2">
           {post.comments?.map((c: any) => (
             <div key={c.id} className="rounded border p-2 text-sm">

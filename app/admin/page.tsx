@@ -1,16 +1,30 @@
-import Card from '@/components/Card';
+import Link from 'next/link';
+import { redirect } from 'next/navigation';
+import { getAuthFromCookies } from '@/lib/auth';
+
+const adminActions = [
+  ['动物管理', '/animals'],
+  ['论坛管理', '/forum'],
+  ['求助管理', '/help'],
+  ['领养管理', '/adoption'],
+  ['知识文章管理', '/knowledge']
+];
 
 export default function AdminPage() {
+  const auth = getAuthFromCookies();
+  if (!auth || auth.role !== 'admin') {
+    redirect('/login');
+  }
+
   return (
-    <div className="space-y-4">
-      <h2 className="text-2xl font-bold">Admin Dashboard</h2>
-      <div className="grid gap-4 md:grid-cols-2">
-        <Card title="Animals Management">CRUD for animal profiles and adoption status.</Card>
-        <Card title="Forum Moderation">Review and delete inappropriate posts/comments.</Card>
-        <Card title="Help Requests">Update request status and prioritize urgent needs.</Card>
-        <Card title="Adoption Applications">Approve/reject applications and follow-up contacts.</Card>
-        <Card title="Knowledge Articles">Create/edit rescue guides and emergency info.</Card>
-        <Card title="User Management">Manage users and role permissions.</Card>
+    <div className="space-y-4 rounded-xl border bg-white p-6">
+      <h2 className="text-2xl font-bold">管理员操作</h2>
+      <div className="grid gap-3 md:grid-cols-2">
+        {adminActions.map(([label, href]) => (
+          <Link key={href} href={href} className="rounded border px-4 py-3 text-sm hover:bg-slate-50">
+            {label}
+          </Link>
+        ))}
       </div>
     </div>
   );
