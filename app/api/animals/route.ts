@@ -11,7 +11,7 @@ export async function GET(req: Request) {
   const values: string[] = [];
   if (q) {
     values.push(`%${q}%`);
-    conditions.push(`(name ILIKE $${values.length} OR description ILIKE $${values.length})`);
+    conditions.push(`(name ILIKE $${values.length} OR description ILIKE $${values.length} OR alias ILIKE $${values.length})`);
   }
   if (species) {
     values.push(species);
@@ -27,9 +27,14 @@ export async function POST(req: Request) {
   try {
     await requireAdmin();
     const body = await req.json();
+
+    if (!body.name || !['cat', 'dog'].includes(body.species)) {
+      return fail('动物名称和类型必填', 400);
+    }
+
     const result = await query(
-      `INSERT INTO animals(avatar_url,name,species,coat_color,gender,age,neutered,location,active_time,personality_tags,description,adoption_status)
-       VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12) RETURNING *`,
+      `INSERT INTO animals(avatar_url,name,species,coat_color,gender,age,neutered,location,active_time,personality_tags,description,adoption_status,alias,feeding_guide,anecdotes,social_notes)
+       VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16) RETURNING *`,
       [
         body.avatar_url,
         body.name,
@@ -42,7 +47,11 @@ export async function POST(req: Request) {
         body.active_time,
         body.personality_tags || [],
         body.description,
-        body.adoption_status || 'campus resident'
+        body.adoption_status || 'campus resident',
+        body.alias || null,
+        body.feeding_guide || null,
+        body.anecdotes || null,
+        body.social_notes || null
       ]
     );
     return ok(result.rows[0], 201);
