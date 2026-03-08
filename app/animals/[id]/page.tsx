@@ -30,13 +30,17 @@ export default async function AnimalDetail({ params }: { params: { id: string } 
 
   return (
     <div className="space-y-3 rounded-xl border bg-white p-6">
-      {animal.avatar_url ? <img src={animal.avatar_url} alt={animal.name} className="h-56 w-full rounded-xl object-cover" /> : null}
+      {animal.avatar_url ? <img src={animal.avatar_url} alt={animal.name} className="mx-auto aspect-[3/4] w-full max-w-sm rounded-xl object-cover" /> : null}
       <h2 className="text-2xl font-bold">{animal.name}</h2>
+      <p className="text-sm text-slate-700">别名：{animal.alias || '暂无'}</p>
       <p>{animal.species} · {animal.gender} · {animal.age}</p>
       <p>毛色：{animal.coat_color} | 绝育：{animal.neutered ? '是' : '否'}</p>
       <p>活动地点：{animal.location} | 活动时间：{animal.active_time}</p>
       <p>领养状态：{animal.adoption_status}</p>
       <p>{animal.description}</p>
+      {animal.feeding_guide ? <p>🍚 投喂指南：{animal.feeding_guide}</p> : null}
+      {animal.anecdotes ? <p>🌟 趣闻轶事：{animal.anecdotes}</p> : null}
+      {animal.social_notes ? <p>👥 人际关系：{animal.social_notes}</p> : null}
       <div className="pt-2">
         <Link href={`/adoption?animalId=${animal.id}`} className="rounded-xl bg-emerald-600 px-4 py-2 text-sm font-medium text-white hover:bg-emerald-700">
           提交领养申请

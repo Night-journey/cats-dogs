@@ -88,18 +88,18 @@ export default function ForumComposer() {
   }
 
   return (
-    <section className="rounded-2xl border border-amber-100 bg-white/90 p-4 shadow-sm">
+    <section className="rounded-3xl border border-rose-100 bg-white p-4 shadow-sm">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h3 className="font-semibold text-amber-900">发布新帖子</h3>
+          <h3 className="font-semibold text-amber-900">发布新笔记</h3>
           <p className="text-sm text-slate-600">必须包含：标题、正文和至少一张图片。</p>
         </div>
         <button
           type="button"
           onClick={() => setOpen((v) => !v)}
-          className="rounded-xl bg-amber-500 px-3 py-2 text-sm font-medium text-white transition hover:bg-amber-600"
+          className="rounded-full bg-rose-500 px-4 py-2 text-sm font-medium text-white transition hover:bg-rose-600"
         >
-          {open ? '收起' : '发帖'}
+          {open ? '收起' : '发笔记'}
         </button>
       </div>
 
@@ -142,7 +142,7 @@ export default function ForumComposer() {
             ) : null}
           </div>
 
-          <button disabled={loading || uploading} className="rounded-xl bg-orange-500 px-4 py-2 text-sm font-medium text-white disabled:opacity-70">
+          <button disabled={loading || uploading} className="rounded-full bg-rose-500 px-4 py-2 text-sm font-medium text-white disabled:opacity-70">
             {loading ? '发布中…' : '立即发布'}
           </button>
         </form>

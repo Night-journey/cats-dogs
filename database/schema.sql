@@ -21,6 +21,10 @@ CREATE TABLE IF NOT EXISTS animals (
   personality_tags TEXT[],
   description TEXT,
   adoption_status VARCHAR(40) NOT NULL DEFAULT 'campus resident',
+  alias TEXT,
+  feeding_guide TEXT,
+  anecdotes TEXT,
+  social_notes TEXT,
   created_at TIMESTAMP DEFAULT NOW()
 );
 
@@ -108,6 +112,7 @@ CREATE TABLE IF NOT EXISTS adoption_posts (
   health_info TEXT,
   description TEXT,
   contact_info TEXT,
+  image_urls TEXT[] NOT NULL DEFAULT '{}',
   status VARCHAR(20) NOT NULL DEFAULT 'pending',
   created_at TIMESTAMP DEFAULT NOW()
 );
@@ -132,3 +137,13 @@ CREATE TABLE IF NOT EXISTS articles (
   created_at TIMESTAMP DEFAULT NOW(),
   updated_at TIMESTAMP DEFAULT NOW()
 );
+
+
+ALTER TABLE adoption_posts ADD COLUMN IF NOT EXISTS image_urls TEXT[] NOT NULL DEFAULT '{}';
+
+
+ALTER TABLE animals ADD COLUMN IF NOT EXISTS alias TEXT;
+ALTER TABLE animals ADD COLUMN IF NOT EXISTS feeding_guide TEXT;
+ALTER TABLE animals ADD COLUMN IF NOT EXISTS anecdotes TEXT;
+ALTER TABLE animals ADD COLUMN IF NOT EXISTS social_notes TEXT;
+
