@@ -2,7 +2,19 @@ import Link from 'next/link';
 import AnimalNoteComposer from '@/components/AnimalNoteComposer';
 import AnimalCorrectionComposer from '@/components/AnimalCorrectionComposer';
 import ModerationControl from '@/components/ModerationControl';
+import AdminDeleteButton from '@/components/AdminDeleteButton';
 import { getAuthFromCookies } from '@/lib/auth';
+
+function normalizeStatus(status?: string) {
+  if (!status) return '未知';
+  const statusMap: Record<string, string> = {
+    'campus_resident': '在校活跃',
+    'adopted': '被领养',
+    'medical': '就医中',
+    'deceased': '在喵星'
+  };
+  return statusMap[status] || status;
+}
 
 async function getAnimal(id: string) {
   const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/api/animals/${id}`, { cache: 'no-store' });
@@ -36,15 +48,23 @@ export default async function AnimalDetail({ params }: { params: { id: string } 
       <p>{animal.species} · {animal.gender} · {animal.age}</p>
       <p>毛色：{animal.coat_color} | 绝育：{animal.neutered ? '是' : '否'}</p>
       <p>活动地点：{animal.location} | 活动时间：{animal.active_time}</p>
-      <p>领养状态：{animal.adoption_status}</p>
+      <p>领养状态：{normalizeStatus(animal.adoption_status)}</p>
       <p>{animal.description}</p>
       {animal.feeding_guide ? <p>🍚 投喂指南：{animal.feeding_guide}</p> : null}
       {animal.anecdotes ? <p>🌟 趣闻轶事：{animal.anecdotes}</p> : null}
       {animal.social_notes ? <p>👥 人际关系：{animal.social_notes}</p> : null}
-      <div className="pt-2">
+      <div className="flex gap-2 pt-2">
         <Link href={`/adoption?animalId=${animal.id}`} className="rounded-xl bg-emerald-600 px-4 py-2 text-sm font-medium text-white hover:bg-emerald-700">
           提交领养申请
         </Link>
+        {isAdmin && (
+          <>
+            <Link href={`/animals/${animal.id}/edit`} className="rounded-xl border border-amber-300 bg-amber-50 px-4 py-2 text-sm font-medium text-amber-800 hover:bg-amber-100">
+              编辑动物
+            </Link>
+            <AdminDeleteButton endpoint={`/api/animals/${animal.id}`} label="删除动物" redirectTo="/animals" />
+          </>
+        )}
       </div>
 
       <section className="space-y-2 pt-3">

@@ -33,7 +33,8 @@ export async function POST(req: Request) {
       [title, content, imageUrls, auth.userId]
     );
     return ok(created.rows[0], 201);
-  } catch {
+  } catch (e) {
+    console.error('POST /api/posts error:', e);
     return fail('Unauthorized', 401);
   }
 }

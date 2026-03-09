@@ -31,8 +31,41 @@ const feedingTips = [
   '优先提供干净饮水，脱水比饥饿更危险。',
   '猫可少量喂湿粮或白水煮鸡胸肉，狗可喂清淡肉类+少量主食。',
   '避免投喂牛奶、辛辣/高盐食物、鸡鸭细骨。',
-  '采用“少量多次”方式，避免一次喂太多引起呕吐。',
+  '采用"少量多次"方式，避免一次喂太多引起呕吐。',
   '长期喂养建议定点定时，便于绝育与健康管理。',
+];
+
+const newArticles = [
+  {
+    emoji: '💉',
+    title: '绝育的重要性',
+    tags: ['绝育', 'TNR'],
+    content: '绝育可以有效控制流浪动物数量，减少无序繁殖。同时也能降低某些疾病的风险，改善动物的行为问题。',
+  },
+  {
+    emoji: '❄️',
+    title: '冬季关爱指南',
+    tags: ['冬季保暖'],
+    content: '冬天要为流浪动物提供避风保暖的窝。可以使用纸箱加上旧衣物制作简易猫窝。确保它们有未结冰的饮用水。',
+  },
+  {
+    emoji: '🏠',
+    title: '临时安置建议',
+    tags: ['安置', '临时'],
+    content: '如果需要临时安置流浪动物，准备一个安静、温暖的空间。提供食物、水和猫砂。尽快联系救助组织或寻找领养家庭。',
+  },
+  {
+    emoji: '🐱',
+    title: '如何与流浪猫相处',
+    tags: ['互动', '关系'],
+    content: '不要突然靠近或大声说话。保持距离慢慢建立信任。可以先放置食物让它熟悉你的气味。耐心是建立关系的关键。',
+  },
+  {
+    emoji: '⚠️',
+    title: '安全注意事项',
+    tags: ['安全', '健康'],
+    content: '与流浪动物接触时要注意安全：不要直视它的眼睛、不要突然移动、不要在母兽面前靠近幼崽。勤洗手，预防疾病传播。',
+  },
 ];
 
 async function getArticles() {
@@ -50,8 +83,8 @@ export default async function KnowledgePage() {
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div>
             <p className="mb-2 text-sm font-medium text-emerald-700">校园流浪动物科普</p>
-            <h2 className="mb-2 text-2xl font-bold text-slate-900">遇到受伤动物怎么办？如何正确喂食？</h2>
-            <p className="text-sm text-slate-600">先稳住现场、再判断伤情、及时联系救助。科学喂养和规范记录能显著提升救助成功率。</p>
+            <h2 className="mb-2 text-2xl font-bold text-slate-900">校园流浪动物救助指南</h2>
+            <p className="text-sm text-slate-600">科学救助、规范喂养，让每一只流浪动物都能得到关爱。</p>
           </div>
           {isAdmin ? (
             <Link href="/knowledge/new" className="rounded-xl bg-emerald-600 px-4 py-2 text-sm font-medium text-white hover:bg-emerald-700">
@@ -87,21 +120,20 @@ export default async function KnowledgePage() {
         </Card>
       </div>
 
-      <section>
-        <h3 className="mb-3 text-xl font-semibold">📚 延伸阅读</h3>
-        <div className="space-y-3">
-          {articles.map((article: Article) => (
-            <a
-              key={article.id}
-              href={`/knowledge/${article.id}`}
-              className="block rounded-xl border border-slate-200 bg-white p-4 transition hover:-translate-y-0.5 hover:shadow-sm"
-            >
-              <p className="font-semibold text-slate-900">{article.title}</p>
-              <p className="mt-1 inline-flex rounded-full bg-slate-100 px-2 py-0.5 text-xs text-slate-600">{article.category}</p>
-            </a>
-          ))}
-        </div>
-      </section>
+      <div className="grid gap-4 lg:grid-cols-2">
+        {newArticles.map((article) => (
+          <Card key={article.title} title={`${article.emoji} ${article.title}`}>
+            <p className="text-sm text-slate-700">{article.content}</p>
+            <div className="mt-3 flex flex-wrap gap-2">
+              {article.tags.map((tag) => (
+                <span key={tag} className="rounded-full bg-amber-100 px-2 py-0.5 text-xs text-amber-800">
+                  {tag}
+                </span>
+              ))}
+            </div>
+          </Card>
+        ))}
+      </div>
     </div>
   );
 }

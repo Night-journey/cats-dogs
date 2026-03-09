@@ -1,34 +1,40 @@
 'use client';
 
 import { useState } from 'react';
-import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
-export default function AnimalFiltersForm({ q, species }: { q?: string; species?: string }) {
-  const [open, setOpen] = useState(false);
+export default function AnimalFiltersForm({ q }: { q?: string; species?: string }) {
+  const router = useRouter();
+  const [searchValue, setSearchValue] = useState(q || '');
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const params = new URLSearchParams();
+    if (searchValue.trim()) {
+      params.set('q', searchValue.trim());
+    }
+    router.push(`/animals${params.toString() ? `?${params.toString()}` : ''}`);
+  };
 
   return (
-    <section className="rounded-2xl border border-amber-100 bg-white/90 p-4 shadow-sm">
-      <div className="flex items-center justify-between gap-3">
-        <h3 className="font-semibold text-amber-900">筛选条件</h3>
-        <button type="button" onClick={() => setOpen((v) => !v)} className="rounded-xl bg-amber-500 px-4 py-2 text-sm font-medium text-white">
-          {open ? '收起' : '展开筛选'}
+    <form onSubmit={handleSubmit} className="relative">
+      <div className="relative">
+        <input 
+          type="text"
+          value={searchValue}
+          onChange={(e) => setSearchValue(e.target.value)}
+          className="w-full rounded-xl border border-amber-200 px-4 py-3 pr-12 bg-white text-slate-700 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+          placeholder="搜索动物名称..." 
+        />
+        <button 
+          type="submit" 
+          className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 text-amber-500 hover:text-amber-600"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          </svg>
         </button>
       </div>
-
-      {open ? (
-        <form className="mt-3 grid gap-3 md:grid-cols-4" method="GET">
-          <input name="q" defaultValue={q || ''} className="rounded-xl border border-amber-200 px-3 py-2 md:col-span-2" placeholder="搜索名称或描述" />
-          <select name="species" defaultValue={species || ''} className="rounded-xl border border-amber-200 px-3 py-2">
-            <option value="">全部物种</option>
-            <option value="cat">猫</option>
-            <option value="dog">狗</option>
-          </select>
-          <div className="flex gap-2">
-            <button className="rounded-xl bg-amber-500 px-4 py-2 text-sm font-medium text-white">筛选</button>
-            <Link href="/animals" className="rounded-xl border border-amber-200 px-4 py-2 text-sm text-slate-700">重置</Link>
-          </div>
-        </form>
-      ) : null}
-    </section>
+    </form>
   );
 }

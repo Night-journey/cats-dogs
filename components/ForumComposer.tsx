@@ -32,7 +32,11 @@ export default function ForumComposer() {
         const data = await res.json().catch(() => null);
         if (!res.ok || !data?.url) {
           setIsError(true);
-          setMessage(data?.message || '图片上传失败，请重试');
+          if (res.status === 401) {
+            setMessage('请先登录');
+          } else {
+            setMessage(data?.message || '图片上传失败，请重试');
+          }
           return;
         }
         uploaded.push(data.url);

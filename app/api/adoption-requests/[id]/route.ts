@@ -34,13 +34,15 @@ export async function PUT(req: Request, { params }: { params: { id: string } }) 
       await client.query('UPDATE adoption_requests SET status=$1 WHERE animal_id=$2 AND id<>$3 AND status=$4', ['rejected', animalId, params.id, 'pending']);
       await client.query('COMMIT');
       return ok(approved.rows[0]);
-    } catch {
+    } catch (e) {
       await client.query('ROLLBACK');
-      return fail('Failed to update adoption status', 500);
+      console.error('Adoption request update error:', e);
+      return fail('更新状态失败，请稍后重试', 500);
     } finally {
       client.release();
     }
-  } catch {
+  } catch (e) {
+    console.error('Adoption request auth error:', e);
     return fail('Unauthorized', 401);
   }
 }
@@ -51,7 +53,8 @@ export async function DELETE(_: Request, { params }: { params: { id: string } })
     const result = await query('DELETE FROM adoption_requests WHERE id=$1 RETURNING id', [params.id]);
     if (!result.rowCount) return fail('Not found', 404);
     return ok({ message: 'Deleted' });
-  } catch {
+  } catch (e) {
+    console.error('Adoption request delete error:', e);
     return fail('Unauthorized', 401);
   }
 }

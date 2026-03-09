@@ -33,6 +33,9 @@ export default function AdoptionPostComposer() {
 
     const data = await res.json().catch(() => null);
     if (!res.ok || !data?.url) {
+      if (res.status === 401) {
+        throw new Error('请先登录');
+      }
       throw new Error(data?.error || '图片上传失败');
     }
     return data.url as string;

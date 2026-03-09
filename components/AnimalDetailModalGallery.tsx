@@ -10,6 +10,7 @@ type AnimalItem = {
   location?: string;
   description?: string;
   personality_tags?: string[];
+  adoption_status?: string;
 };
 
 type AnimalDetail = {
@@ -48,8 +49,13 @@ function normalizeGender(gender?: string) {
 
 function normalizeStatus(status?: string) {
   if (!status) return '未知';
-  if (status === 'campus resident') return '在校活跃';
-  return status;
+  const statusMap: Record<string, string> = {
+    'campus_resident': '在校活跃',
+    'adopted': '被领养',
+    'medical': '就医中',
+    'deceased': '在喵星'
+  };
+  return statusMap[status] || status;
 }
 
 export default function AnimalDetailModalGallery({ animals }: { animals: AnimalItem[] }) {
@@ -98,35 +104,31 @@ export default function AnimalDetailModalGallery({ animals }: { animals: AnimalI
 
   return (
     <>
-      <div className="rounded-3xl border border-amber-100 bg-white/70 p-3 shadow-sm">
-        <div className="mb-3 flex items-center justify-between px-1">
-          <h3 className="text-lg font-semibold text-amber-900">校园猫狗图鉴卡片</h3>
-          <span className="rounded-full bg-amber-100 px-3 py-1 text-xs text-amber-700">点击卡片查看详情</span>
-        </div>
-
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-          {animals.map((a) => (
-            <button
-              key={a.id}
-              type="button"
-              onClick={() => setSelectedId(a.id)}
-              className="group overflow-hidden rounded-3xl border border-amber-100 bg-white p-3 text-left shadow-sm transition hover:-translate-y-0.5 hover:shadow-md"
-            >
-              {a.avatar_url ? <img src={a.avatar_url} alt={a.name} className="mb-3 aspect-[3/4] w-full rounded-2xl object-cover" /> : null}
-              <p className="text-lg font-semibold text-slate-900">{a.name}</p>
-              <p className="text-sm text-amber-700">🐾 {normalizeSpecies(a.species)} · 📍 {a.location || '未知地点'}</p>
+      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
+        {animals.map((a) => (
+          <button
+            key={a.id}
+            type="button"
+            onClick={() => setSelectedId(a.id)}
+            className="group block overflow-hidden rounded-2xl bg-white text-left transition hover:-translate-y-1 hover:shadow-xl"
+          >
+            {a.avatar_url ? <img src={a.avatar_url} alt={a.name} className="block aspect-[3/4] w-full rounded-t-2xl object-cover" /> : <div className="block aspect-[3/4] w-full rounded-t-2xl bg-gradient-to-br from-amber-100 to-orange-100" />}
+            <div className="p-2.5">
+              <div className="flex items-center justify-between">
+                <p className="text-base font-bold text-slate-900">{a.name}</p>
+                <span className="rounded-full bg-emerald-100 px-2 py-0.5 text-xs font-medium text-emerald-700">{normalizeStatus(a.adoption_status)}</span>
+              </div>
+              <p className="mt-1 text-xs text-amber-700">🐾 {normalizeSpecies(a.species)} · 📍 {a.location || '未知地点'}</p>
               {a.personality_tags?.length ? (
-                <div className="mt-2 flex flex-wrap gap-1.5">
-                  {a.personality_tags.slice(0, 3).map((tag) => (
-                    <span key={`${a.id}-${tag}`} className="rounded-full bg-orange-50 px-2 py-0.5 text-xs text-orange-700">#{tag}</span>
+                <div className="mt-2 flex flex-wrap gap-1">
+                  {a.personality_tags.slice(0, 2).map((tag) => (
+                    <span key={`${a.id}-${tag}`} className="rounded-full bg-orange-50 px-1.5 py-0.5 text-xs text-orange-600">#{tag}</span>
                   ))}
                 </div>
               ) : null}
-              <p className="mt-2 line-clamp-2 text-sm text-slate-600">{a.description || '暂无介绍'}</p>
-              <p className="mt-3 text-xs font-medium text-rose-600 group-hover:text-rose-700">查看图鉴详情 →</p>
-            </button>
-          ))}
-        </div>
+            </div>
+          </button>
+        ))}
       </div>
 
       {selectedId ? (

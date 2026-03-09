@@ -33,7 +33,8 @@ export async function PUT(req: Request, { params }: { params: { id: string } }) 
     );
     if (!result.rowCount) return fail('Not found', 404);
     return ok(result.rows[0]);
-  } catch {
+  } catch (e) {
+    console.error('PUT /api/help-requests/[id] error:', e);
     return fail('Unauthorized', 401);
   }
 }
@@ -45,7 +46,8 @@ export async function DELETE(_: Request, { params }: { params: { id: string } })
     const result = await query('DELETE FROM help_requests WHERE id=$1 RETURNING id', [params.id]);
     if (!result.rowCount) return fail('Not found', 404);
     return ok({ message: 'Deleted' });
-  } catch {
+  } catch (e) {
+    console.error('DELETE /api/help-requests/[id] error:', e);
     return fail('Unauthorized', 401);
   }
 }

@@ -11,7 +11,8 @@ export async function POST(req: Request) {
       [body.post_id, auth.userId, body.content]
     );
     return ok(result.rows[0], 201);
-  } catch {
+  } catch (e) {
+    console.error('POST /api/comments error:', e);
     return fail('Unauthorized', 401);
   }
 }

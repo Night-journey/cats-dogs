@@ -1,6 +1,6 @@
 import { fail, ok } from '@/lib/api';
 import { query } from '@/lib/db';
-import { requireAdmin } from '@/lib/guards';
+import { getAuthFromCookies } from '@/lib/auth';
 
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
@@ -25,7 +25,10 @@ export async function GET(req: Request) {
 
 export async function POST(req: Request) {
   try {
-    await requireAdmin();
+    const auth = await getAuthFromCookies();
+    if (!auth) return fail('Unauthorized', 401);
+    if (auth.role !== 'admin') return fail('Forbidden', 403);
+    
     const body = await req.json();
 
     if (!body.name || !['cat', 'dog'].includes(body.species)) {
@@ -56,6 +59,7 @@ export async function POST(req: Request) {
     );
     return ok(result.rows[0], 201);
   } catch (e) {
-    return fail((e as Error).message === 'Forbidden' ? 'Forbidden' : 'Unauthorized', (e as Error).message === 'Forbidden' ? 403 : 401);
+    console.error('POST /api/animals error:', e);
+    return fail((e as Error).message || 'Server error', 500);
   }
 }

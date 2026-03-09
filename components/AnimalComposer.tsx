@@ -38,7 +38,7 @@ const initialState: FormState = {
   description: '',
   anecdotes: '',
   socialNotes: '',
-  adoptionStatus: 'campus resident'
+  adoptionStatus: 'campus_resident'
 };
 
 export default function AnimalComposer() {
@@ -60,10 +60,14 @@ export default function AnimalComposer() {
       formData.append('file', file);
       formData.append('kind', 'animal');
 
-      const res = await fetch('/api/upload', { method: 'POST', body: formData });
+      const res = await fetch('/api/upload', { method: 'POST', credentials: 'include', body: formData });
       const data = await res.json().catch(() => null);
       if (!res.ok || !data?.url) {
-        setMessage(data?.message || '头像上传失败');
+        if (res.status === 401) {
+          setMessage('请先登录');
+        } else {
+          setMessage(data?.message || '头像上传失败');
+        }
         return;
       }
       setForm((prev) => ({ ...prev, avatarUrl: data.url }));
@@ -104,6 +108,7 @@ export default function AnimalComposer() {
 
       const res = await fetch('/api/animals', {
         method: 'POST',
+        credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
       });
@@ -154,7 +159,12 @@ export default function AnimalComposer() {
             <input className="rounded-xl border border-amber-200 px-3 py-2" placeholder="预估年龄（如 3岁）" value={form.age} onChange={(e) => setForm({ ...form, age: e.target.value })} />
             <input className="rounded-xl border border-amber-200 px-3 py-2" placeholder="常驻地点" value={form.location} onChange={(e) => setForm({ ...form, location: e.target.value })} />
             <input className="rounded-xl border border-amber-200 px-3 py-2" placeholder="活跃时间（如 全天活跃）" value={form.activeTime} onChange={(e) => setForm({ ...form, activeTime: e.target.value })} />
-            <input className="rounded-xl border border-amber-200 px-3 py-2 md:col-span-2" placeholder="状态（默认 campus resident）" value={form.adoptionStatus} onChange={(e) => setForm({ ...form, adoptionStatus: e.target.value })} />
+            <select className="rounded-xl border border-amber-200 px-3 py-2 md:col-span-2" value={form.adoptionStatus} onChange={(e) => setForm({ ...form, adoptionStatus: e.target.value })}>
+              <option value="campus_resident">在校活跃</option>
+              <option value="adopted">被领养</option>
+              <option value="medical">就医中</option>
+              <option value="deceased">在喵星</option>
+            </select>
           </div>
 
           <div className="space-y-2 rounded-xl border border-amber-100 bg-amber-50/50 p-3">

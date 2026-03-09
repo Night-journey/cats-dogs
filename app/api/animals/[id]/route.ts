@@ -37,7 +37,8 @@ export async function PUT(req: Request, { params }: { params: { id: string } }) 
     );
     if (!result.rowCount) return fail('Not found', 404);
     return ok(result.rows[0]);
-  } catch {
+  } catch (e) {
+    console.error('PUT /api/animals/[id] error:', e);
     return fail('Unauthorized', 401);
   }
 }
@@ -47,7 +48,8 @@ export async function DELETE(_: Request, { params }: { params: { id: string } })
     await requireAdmin();
     await query('DELETE FROM animals WHERE id=$1', [params.id]);
     return ok({ message: 'Deleted' });
-  } catch {
+  } catch (e) {
+    console.error('DELETE /api/animals/[id] error:', e);
     return fail('Unauthorized', 401);
   }
 }

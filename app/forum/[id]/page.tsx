@@ -1,5 +1,7 @@
 import CommentComposer from '@/components/CommentComposer';
 import PostLikeButton from '@/components/PostLikeButton';
+import AdminDeleteButton from '@/components/AdminDeleteButton';
+import { getAuthFromCookies } from '@/lib/auth';
 
 async function getPost(id: string) {
   const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/api/posts/${id}`, { cache: 'no-store' });
@@ -7,10 +9,17 @@ async function getPost(id: string) {
 }
 
 export default async function PostDetail({ params }: { params: { id: string } }) {
-  const post = await getPost(params.id);
+  const [post, auth] = await Promise.all([getPost(params.id), getAuthFromCookies()]);
+  const isAdmin = auth?.role === 'admin';
+  
   return (
     <div className="space-y-4 rounded-xl border bg-white p-6">
-      <h2 className="text-2xl font-bold">{post.title}</h2>
+      <div className="flex items-start justify-between">
+        <h2 className="text-2xl font-bold">{post.title}</h2>
+        {isAdmin && (
+          <AdminDeleteButton endpoint={`/api/posts/${post.id}`} label="删除帖子" redirectTo="/forum" />
+        )}
+      </div>
       <p className="text-sm text-slate-500">作者：{post.author} · {post.likes_count} 次点赞</p>
       <PostLikeButton postId={post.id} />
       <p>{post.content}</p>
