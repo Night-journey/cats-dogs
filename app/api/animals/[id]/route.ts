@@ -13,7 +13,7 @@ export async function PUT(req: Request, { params }: { params: { id: string } }) 
     await requireAdmin();
     const body = await req.json();
     const result = await query(
-      `UPDATE animals SET avatar_url=$1,name=$2,species=$3,coat_color=$4,gender=$5,age=$6,neutered=$7,location=$8,active_time=$9,personality_tags=$10,description=$11,adoption_status=$12,alias=$13,feeding_guide=$14,anecdotes=$15,social_notes=$16
+      `UPDATE animals SET avatar_url=$1,name=$2,species=$3,coat_color=$4,gender=$5,birth_date=$6,neutered=$7,location=$8,active_time=$9,personality_tags=$10,description=$11,adoption_status=$12,alias=$13,feeding_guide=$14,anecdotes=$15,social_notes=$16
        WHERE id=$17 RETURNING *`,
       [
         body.avatar_url,
@@ -21,7 +21,7 @@ export async function PUT(req: Request, { params }: { params: { id: string } }) 
         body.species,
         body.coat_color,
         body.gender,
-        body.age,
+        body.birth_date,
         body.neutered,
         body.location,
         body.active_time,

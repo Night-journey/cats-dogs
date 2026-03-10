@@ -6,13 +6,13 @@ import AuthActions from '@/components/AuthActions';
 import { query } from '@/lib/db';
 
 export const metadata: Metadata = {
-  title: '校园流浪动物平台',
-  description: '一起帮助校园流浪猫狗'
+  title: '西财猫猫狗狗',
+  description: '一起帮助西财猫猫狗狗'
 };
 
 const baseNav = [
   ['首页', '/'],
-  ['动物图鉴', '/animals'],
+  ['猫狗图鉴', '/animals'],
   ['论坛', '/forum'],
   ['求助', '/help'],
   ['领养', '/adoption'],
@@ -40,7 +40,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       <body>
         <header className="sticky top-0 z-20 border-b border-amber-100 bg-white/85 backdrop-blur-md">
           <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-4 px-4 py-3">
-            <h1 className="rounded-full bg-amber-100 px-3 py-1 text-sm font-semibold text-amber-900">🐾 校园流浪动物平台</h1>
+            <h1 className="rounded-full bg-amber-100 px-3 py-1 text-sm font-semibold text-amber-900">🐾 西财猫猫狗狗</h1>
             <nav className="flex flex-wrap gap-2 text-sm">
               {nav.map(([label, href]) => (
                 <Link

@@ -23,3 +23,24 @@ export async function PUT(req: Request, { params }: { params: { id: string } }) 
   if (!result.rowCount) return fail('Not found or no permission', 404);
   return ok(result.rows[0]);
 }
+
+export async function DELETE(_: Request, { params }: { params: { id: string } }) {
+  const auth = await getAuthFromCookies();
+  if (!auth) {
+    return fail('Unauthorized', 401);
+  }
+
+  // 检查帖子是否存在
+  const post = await query('SELECT author_id FROM adoption_posts WHERE id=$1', [params.id]);
+  if (!post.rowCount) {
+    return fail('帖子不存在', 404);
+  }
+
+  // 允许作者或管理员删除
+  if (post.rows[0].author_id !== auth.userId && auth.role !== 'admin') {
+    return fail('没有权限删除此帖子', 403);
+  }
+
+  await query('DELETE FROM adoption_posts WHERE id=$1', [params.id]);
+  return ok({ message: 'Deleted' });
+}

@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { getAuthFromCookies } from '@/lib/auth';
 import AnimalFiltersForm from '@/components/AnimalFiltersForm';
-import AnimalDetailModalGallery from '@/components/AnimalDetailModalGallery';
+import AnimalCardGrid from '@/components/AnimalCardGrid';
 
 async function getAnimals(searchParams?: { q?: string; species?: string }) {
   const params = new URLSearchParams();
@@ -18,7 +18,7 @@ export default async function AnimalsPage({ searchParams }: { searchParams?: { q
   return (
     <div className="space-y-4">
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <h2 className="text-2xl font-bold text-amber-900">动物图鉴</h2>
+        <h2 className="text-2xl font-bold text-amber-900">猫狗图鉴</h2>
         {auth?.role === 'admin' ? (
           <Link href="/animals/new" className="rounded-xl bg-emerald-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-emerald-700">
             + 增加动物
@@ -27,7 +27,7 @@ export default async function AnimalsPage({ searchParams }: { searchParams?: { q
       </div>
 
       <AnimalFiltersForm q={searchParams?.q} species={searchParams?.species} />
-      <AnimalDetailModalGallery animals={animals} />
+      <AnimalCardGrid animals={animals} />
     </div>
   );
 }

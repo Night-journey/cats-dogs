@@ -3,7 +3,11 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 
-const statuses = ['open', 'processing', 'closed'];
+const statusOptions = [
+  { value: 'open', label: '待响应' },
+  { value: 'processing', label: '处理中' },
+  { value: 'closed', label: '已解决' }
+];
 
 export default function HelpStatusControl({ id, current, isAdmin, urgentLevel = 0, pinned = false }: { id: number; current: string; isAdmin: boolean; urgentLevel?: number; pinned?: boolean }) {
   const router = useRouter();
@@ -29,8 +33,8 @@ export default function HelpStatusControl({ id, current, isAdmin, urgentLevel = 
   return (
     <div className="mt-2 flex items-center gap-2">
       <select value={status} onChange={(e) => setStatus(e.target.value)} className="rounded border border-amber-200 px-2 py-1 text-sm">
-        {statuses.map((s) => (
-          <option key={s} value={s}>{s}</option>
+        {statusOptions.map((s) => (
+          <option key={s.value} value={s.value}>{s.label}</option>
         ))}
       </select>
       {isAdmin ? (

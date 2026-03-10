@@ -25,12 +25,12 @@ export default function AdoptionPostStatusControl({ id, current }: { id: number;
   return (
     <div className="mt-2 flex items-center gap-2">
       <select className="rounded border border-amber-200 px-2 py-1 text-xs" value={status} onChange={(e) => setStatus(e.target.value)}>
-        <option value="pending">pending</option>
-        <option value="approved">approved</option>
-        <option value="rejected">rejected</option>
+        <option value="pending">待审核</option>
+        <option value="approved">已通过</option>
+        <option value="rejected">已拒绝</option>
       </select>
       <button disabled={loading} onClick={onUpdate} className="rounded bg-slate-800 px-2 py-1 text-xs text-white disabled:opacity-70">
-        {loading ? '保存中…' : '审核状态'}
+        {loading ? '保存中…' : '更新状态'}
       </button>
     </div>
   );

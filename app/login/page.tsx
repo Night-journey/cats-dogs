@@ -40,11 +40,11 @@ export default function LoginPage() {
       <div className="grid items-stretch gap-6 overflow-hidden rounded-3xl border border-amber-100 bg-gradient-to-br from-amber-50 via-rose-50 to-orange-50 shadow-lg sm:gap-0 md:grid-cols-2">
         <section className="hidden flex-col justify-between p-8 md:flex">
           <div className="space-y-4">
-            <p className="inline-flex rounded-full bg-white/80 px-3 py-1 text-xs font-medium text-amber-700">校园流浪动物平台</p>
+            <p className="inline-flex rounded-full bg-white/80 px-3 py-1 text-xs font-medium text-amber-700">西财猫猫狗狗</p>
             <h1 className="text-3xl font-bold leading-tight text-amber-900">欢迎回来，<br />一起守护毛孩子</h1>
             <p className="text-sm leading-6 text-amber-800/80">登录后可发布求助、参与论坛互动并跟进领养进度。</p>
           </div>
-          <p className="text-xs text-amber-700/80">感谢你加入，一起为校园流浪动物提供温暖支持。</p>
+          <p className="text-xs text-amber-700/80">感谢你加入，一起为西财猫猫狗狗提供温暖支持。</p>
         </section>
 
         <form onSubmit={onSubmit} className="space-y-4 bg-white/80 p-5 backdrop-blur-sm sm:p-8">

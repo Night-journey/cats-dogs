@@ -1,14 +1,44 @@
 import AdoptionPostComposer from '@/components/AdoptionPostComposer';
 import AdoptionPostStatusControl from '@/components/AdoptionPostStatusControl';
+import AdminDeleteButton from '@/components/AdminDeleteButton';
+import DeleteButton from '@/components/DeleteButton';
 import { getAuthFromCookies } from '@/lib/auth';
 import { query } from '@/lib/db';
+
+function normalizeStatus(status?: string) {
+  const map: Record<string, string> = {
+    'pending': '待审核',
+    'approved': '已通过',
+    'rejected': '已拒绝'
+  };
+  return map[status || ''] || status;
+}
+
+function normalizeSpecies(species?: string) {
+  if (species === 'cat') return '猫咪';
+  if (species === 'dog') return '狗狗';
+  return species || '';
+}
 
 export default async function AdoptionPage() {
   const auth = await getAuthFromCookies();
   const isAdmin = auth?.role === 'admin';
-  const adoptionPosts = isAdmin
-    ? await query('SELECT * FROM adoption_posts ORDER BY created_at DESC')
-    : await query("SELECT * FROM adoption_posts WHERE status='approved' ORDER BY created_at DESC");
+  const userId = auth?.userId;
+  
+  let adoptionPosts;
+  if (isAdmin) {
+    adoptionPosts = await query('SELECT * FROM adoption_posts ORDER BY created_at DESC');
+  } else {
+    // 显示已通过的 + 自己发布的待审核/已拒绝
+    if (userId) {
+      adoptionPosts = await query(
+        "SELECT * FROM adoption_posts WHERE status='approved' OR author_id=$1 ORDER BY created_at DESC",
+        [userId]
+      );
+    } else {
+      adoptionPosts = await query("SELECT * FROM adoption_posts WHERE status='approved' ORDER BY created_at DESC");
+    }
+  }
 
   return (
     <div className="space-y-5">
@@ -20,8 +50,7 @@ export default async function AdoptionPage() {
       <AdoptionPostComposer />
 
       <section>
-        <h3 className="mb-3 text-lg font-semibold text-slate-800">送养信息流</h3>
-        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
           {adoptionPosts.rows.map((item: any) => (
             <article key={item.id} className="overflow-hidden rounded-3xl border border-emerald-100 bg-white shadow-sm">
               {item.image_urls?.[0] ? (
@@ -32,11 +61,15 @@ export default async function AdoptionPage() {
 
               <div className="space-y-2 p-4">
                 <h4 className="line-clamp-2 font-semibold text-slate-900">{item.title}</h4>
-                <p className="text-sm text-slate-500">{item.animal_name} · {item.species}</p>
+                <p className="text-sm text-slate-500">{item.animal_name} · {normalizeSpecies(item.species)}</p>
                 <p className="line-clamp-3 text-sm text-slate-700">{item.description}</p>
 
                 <div className="flex items-center justify-between text-xs">
-                  <span className="rounded-full bg-emerald-100 px-2 py-1 text-emerald-700">状态：{item.status}</span>
+                  <span className={`rounded-full px-2 py-1 font-medium ${
+                    item.status === 'approved' ? 'bg-emerald-100 text-emerald-700' :
+                    item.status === 'pending' ? 'bg-yellow-100 text-yellow-700' :
+                    'bg-rose-100 text-rose-700'
+                  }`}>{normalizeStatus(item.status)}</span>
                   {item.contact_info ? <span className="text-slate-500">联系：{item.contact_info}</span> : null}
                 </div>
 
@@ -48,7 +81,12 @@ export default async function AdoptionPage() {
                   </div>
                 ) : null}
 
-                {isAdmin ? <AdoptionPostStatusControl id={item.id} current={item.status} /> : null}
+                {(isAdmin || userId === item.author_id) ? (
+                  <div className="flex gap-2">
+                    {isAdmin && <AdoptionPostStatusControl id={item.id} current={item.status} />}
+                    <DeleteButton endpoint={`/api/adoption-posts/${item.id}`} label="删除" />
+                  </div>
+                ) : null}
               </div>
             </article>
           ))}

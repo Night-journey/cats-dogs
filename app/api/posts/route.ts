@@ -10,7 +10,8 @@ export async function GET() {
      LEFT JOIN (SELECT post_id, COUNT(*) like_count FROM likes GROUP BY post_id) l ON l.post_id = p.id
      ORDER BY p.created_at DESC`
   );
-  return ok(result.rows);
+  // 添加 author_id 到返回数据
+  return ok(result.rows.map((row: any) => ({ ...row, author_id: row.author_id })));
 }
 
 export async function POST(req: Request) {
@@ -35,6 +36,35 @@ export async function POST(req: Request) {
     return ok(created.rows[0], 201);
   } catch (e) {
     console.error('POST /api/posts error:', e);
+    return fail('Unauthorized', 401);
+  }
+}
+
+export async function DELETE(req: Request) {
+  try {
+    const auth = await requireAuth();
+    const { searchParams } = new URL(req.url);
+    const id = searchParams.get('id');
+    
+    if (!id) {
+      return fail('缺少帖子ID', 400);
+    }
+
+    // 检查帖子是否存在以及是否是作者
+    const post = await query('SELECT author_id FROM posts WHERE id=$1', [id]);
+    if (!post.rowCount) {
+      return fail('帖子不存在', 404);
+    }
+
+    // 允许作者或管理员删除
+    if (post.rows[0].author_id !== auth.userId && auth.role !== 'admin') {
+      return fail('没有权限删除此帖子', 403);
+    }
+
+    await query('DELETE FROM posts WHERE id=$1', [id]);
+    return ok({ message: 'Deleted' });
+  } catch (e) {
+    console.error('DELETE /api/posts error:', e);
     return fail('Unauthorized', 401);
   }
 }

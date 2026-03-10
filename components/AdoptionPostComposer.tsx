@@ -27,16 +27,20 @@ export default function AdoptionPostComposer() {
     formData.append('kind', 'post');
 
     const res = await fetch('/api/upload', {
+      credentials: 'include',
       method: 'POST',
       body: formData
     });
 
     const data = await res.json().catch(() => null);
-    if (!res.ok || !data?.url) {
+    if (!res.ok) {
       if (res.status === 401) {
         throw new Error('请先登录');
       }
-      throw new Error(data?.error || '图片上传失败');
+      throw new Error(data?.error || `上传失败 (${res.status})`);
+    }
+    if (!data?.url) {
+      throw new Error('图片上传失败');
     }
     return data.url as string;
   }
@@ -54,6 +58,7 @@ export default function AdoptionPostComposer() {
     try {
       const imageUrls = await Promise.all(images.map((file) => uploadImage(file)));
       const res = await fetch('/api/adoption-posts', {
+        credentials: 'include',
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -68,7 +73,7 @@ export default function AdoptionPostComposer() {
       });
       const data = await res.json().catch(() => null);
       if (!res.ok) {
-        setMessage(data?.error || '发布失败，请先登录');
+        setMessage(data?.error || `发布失败 (${res.status})`);
         return;
       }
       setTitle('');

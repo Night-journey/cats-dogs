@@ -66,6 +66,13 @@ export default function ForumComposer() {
       return;
     }
 
+    if (title.trim().length > 25) {
+      setIsError(true);
+      setMessage('标题不能超过25个字');
+      setLoading(false);
+      return;
+    }
+
     try {
       const res = await fetch('/api/posts', {
         credentials: 'include',
@@ -109,13 +116,18 @@ export default function ForumComposer() {
 
       {open ? (
         <form onSubmit={onSubmit} className="mt-4 space-y-3">
-          <input
-            className="w-full rounded-xl border border-amber-200 px-3 py-2"
-            placeholder="帖子标题"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            required
-          />
+          <div className="relative">
+            <input
+              className="w-full rounded-xl border border-amber-200 px-3 py-2 pr-14"
+              placeholder="帖子标题"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              required
+            />
+            <span className={`absolute right-3 top-1/2 -translate-y-1/2 text-xs ${title.length > 25 ? 'text-rose-600 font-medium' : 'text-slate-400'}`}>
+              {title.length}/25
+            </span>
+          </div>
           <textarea
             className="w-full rounded-xl border border-amber-200 px-3 py-2"
             rows={4}

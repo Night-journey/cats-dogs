@@ -36,7 +36,7 @@ export async function POST(req: Request) {
     }
 
     const result = await query(
-      `INSERT INTO animals(avatar_url,name,species,coat_color,gender,age,neutered,location,active_time,personality_tags,description,adoption_status,alias,feeding_guide,anecdotes,social_notes)
+      `INSERT INTO animals(avatar_url,name,species,coat_color,gender,birth_date,neutered,location,active_time,personality_tags,description,adoption_status,alias,feeding_guide,anecdotes,social_notes)
        VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16) RETURNING *`,
       [
         body.avatar_url,
@@ -44,13 +44,13 @@ export async function POST(req: Request) {
         body.species,
         body.coat_color,
         body.gender,
-        body.age,
+        body.birth_date,
         body.neutered,
         body.location,
         body.active_time,
         body.personality_tags || [],
         body.description,
-        body.adoption_status || 'campus resident',
+        body.adoption_status || 'campus_resident',
         body.alias || null,
         body.feeding_guide || null,
         body.anecdotes || null,

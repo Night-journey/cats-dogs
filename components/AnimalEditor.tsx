@@ -11,7 +11,7 @@ type Animal = {
   species: string;
   coat_color?: string;
   gender?: string;
-  age?: string;
+  birth_date?: string;
   neutered?: boolean;
   location?: string;
   active_time?: string;
@@ -30,7 +30,7 @@ type FormState = {
   species: 'cat' | 'dog';
   coatColor: string;
   gender: '妹妹' | '弟弟';
-  age: string;
+  birthDate: string;
   neutered: boolean;
   location: string;
   activeTime: string;
@@ -50,7 +50,7 @@ function animalToForm(animal: Animal): FormState {
     species: animal.species === 'dog' ? 'dog' : 'cat',
     coatColor: animal.coat_color || '',
     gender: animal.gender === '妹妹' ? '妹妹' : '弟弟',
-    age: animal.age || '',
+    birthDate: animal.birth_date || '',
     neutered: animal.neutered || false,
     location: animal.location || '',
     activeTime: animal.active_time || '',
@@ -112,7 +112,7 @@ export default function AnimalEditor({ animal }: { animal: Animal }) {
         species: form.species,
         coat_color: form.coatColor,
         gender: form.gender,
-        age: form.age,
+        birth_date: form.birthDate || null,
         neutered: form.neutered,
         location: form.location,
         active_time: form.activeTime,
@@ -162,7 +162,7 @@ export default function AnimalEditor({ animal }: { animal: Animal }) {
           <option value="弟弟">弟弟</option>
         </select>
         <input className="rounded-xl border border-amber-200 px-3 py-2" placeholder="花色" value={form.coatColor} onChange={(e) => setForm({ ...form, coatColor: e.target.value })} />
-        <input className="rounded-xl border border-amber-200 px-3 py-2" placeholder="预估年龄（如 3岁）" value={form.age} onChange={(e) => setForm({ ...form, age: e.target.value })} />
+        <input type="date" className="rounded-xl border border-amber-200 px-3 py-2" placeholder="破壳日" value={form.birthDate} onChange={(e) => setForm({ ...form, birthDate: e.target.value })} />
         <input className="rounded-xl border border-amber-200 px-3 py-2" placeholder="常驻地点" value={form.location} onChange={(e) => setForm({ ...form, location: e.target.value })} />
         <input className="rounded-xl border border-amber-200 px-3 py-2" placeholder="活跃时间（如 全天活跃）" value={form.activeTime} onChange={(e) => setForm({ ...form, activeTime: e.target.value })} />
         <select className="rounded-xl border border-amber-200 px-3 py-2 md:col-span-2" value={form.adoptionStatus} onChange={(e) => setForm({ ...form, adoptionStatus: e.target.value })}>

@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import CommentComposer from '@/components/CommentComposer';
 import PostLikeButton from '@/components/PostLikeButton';
 import AdminDeleteButton from '@/components/AdminDeleteButton';
@@ -14,6 +15,10 @@ export default async function PostDetail({ params }: { params: { id: string } })
   
   return (
     <div className="space-y-4 rounded-xl border bg-white p-6">
+      <Link href="/forum" className="inline-flex items-center gap-1 text-sm text-slate-600 hover:text-slate-900">
+        ← 返回论坛
+      </Link>
+
       <div className="flex items-start justify-between">
         <h2 className="text-2xl font-bold">{post.title}</h2>
         {isAdmin && (

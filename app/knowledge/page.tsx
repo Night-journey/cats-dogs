@@ -40,19 +40,19 @@ const newArticles = [
     emoji: '💉',
     title: '绝育的重要性',
     tags: ['绝育', 'TNR'],
-    content: '绝育可以有效控制流浪动物数量，减少无序繁殖。同时也能降低某些疾病的风险，改善动物的行为问题。',
+    content: '绝育可以有效控制猫狗数量，减少无序繁殖。同时也能降低某些疾病的风险，改善动物的行为问题。',
   },
   {
     emoji: '❄️',
     title: '冬季关爱指南',
     tags: ['冬季保暖'],
-    content: '冬天要为流浪动物提供避风保暖的窝。可以使用纸箱加上旧衣物制作简易猫窝。确保它们有未结冰的饮用水。',
+    content: '冬天要为猫狗提供避风保暖的窝。可以使用纸箱加上旧衣物制作简易猫窝。确保它们有未结冰的饮用水。',
   },
   {
     emoji: '🏠',
     title: '临时安置建议',
     tags: ['安置', '临时'],
-    content: '如果需要临时安置流浪动物，准备一个安静、温暖的空间。提供食物、水和猫砂。尽快联系救助组织或寻找领养家庭。',
+    content: '如果需要临时安置猫狗，准备一个安静、温暖的空间。提供食物、水和猫砂。尽快联系救助组织或寻找领养家庭。',
   },
   {
     emoji: '🐱',
@@ -64,7 +64,7 @@ const newArticles = [
     emoji: '⚠️',
     title: '安全注意事项',
     tags: ['安全', '健康'],
-    content: '与流浪动物接触时要注意安全：不要直视它的眼睛、不要突然移动、不要在母兽面前靠近幼崽。勤洗手，预防疾病传播。',
+    content: '与猫狗接触时要注意安全：不要直视它的眼睛、不要突然移动、不要在母兽面前靠近幼崽。勤洗手，预防疾病传播。',
   },
 ];
 
@@ -82,9 +82,9 @@ export default async function KnowledgePage() {
       <section className="rounded-2xl border border-emerald-100 bg-gradient-to-r from-emerald-50 to-cyan-50 p-6">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div>
-            <p className="mb-2 text-sm font-medium text-emerald-700">校园流浪动物科普</p>
-            <h2 className="mb-2 text-2xl font-bold text-slate-900">校园流浪动物救助指南</h2>
-            <p className="text-sm text-slate-600">科学救助、规范喂养，让每一只流浪动物都能得到关爱。</p>
+            <p className="mb-2 text-sm font-medium text-emerald-700">西财猫猫狗狗科普</p>
+            <h2 className="mb-2 text-2xl font-bold text-slate-900">西财猫猫狗狗救助指南</h2>
+            <p className="text-sm text-slate-600">科学救助、规范喂养，让每一只猫狗都能得到关爱。</p>
           </div>
           {isAdmin ? (
             <Link href="/knowledge/new" className="rounded-xl bg-emerald-600 px-4 py-2 text-sm font-medium text-white hover:bg-emerald-700">
