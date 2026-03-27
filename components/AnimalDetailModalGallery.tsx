@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
+import Image from 'next/image';
 
 type AnimalItem = {
   id: number;
@@ -112,7 +113,13 @@ export default function AnimalDetailModalGallery({ animals }: { animals: AnimalI
             onClick={() => setSelectedId(a.id)}
             className="group block overflow-hidden rounded-2xl bg-white text-left transition hover:-translate-y-1 hover:shadow-xl"
           >
-            {a.avatar_url ? <img src={a.avatar_url} alt={a.name} className="block aspect-[3/4] w-full rounded-t-2xl object-cover" /> : <div className="block aspect-[3/4] w-full rounded-t-2xl bg-gradient-to-br from-amber-100 to-orange-100" />}
+            {a.avatar_url ? (
+              <div className="relative aspect-[3/4] w-full overflow-hidden rounded-t-2xl">
+                <Image src={a.avatar_url} alt={a.name} fill className="object-cover" sizes="(max-width: 640px) 50vw, 25vw" loading="lazy" />
+              </div>
+            ) : (
+              <div className="block aspect-[3/4] w-full rounded-t-2xl bg-gradient-to-br from-amber-100 to-orange-100" />
+            )}
             <div className="p-2.5">
               <div className="flex items-center justify-between">
                 <p className="text-base font-bold text-slate-900">{a.name}</p>
@@ -149,7 +156,11 @@ export default function AnimalDetailModalGallery({ animals }: { animals: AnimalI
             {!loading && !error && detail ? (
               <div className="space-y-4 pr-8">
                 <div className="grid gap-4 md:grid-cols-[220px_1fr]">
-                  {detail.avatar_url ? <img src={detail.avatar_url} alt={detail.name} className="aspect-[3/4] w-full rounded-2xl object-cover" /> : null}
+                  {detail.avatar_url ? (
+                    <div className="relative aspect-[3/4] w-full overflow-hidden rounded-2xl">
+                      <Image src={detail.avatar_url} alt={detail.name} fill className="object-cover" sizes="220px" />
+                    </div>
+                  ) : null}
 
                   <div className="space-y-2 rounded-2xl bg-amber-50/60 p-4">
                     <h3 className="text-2xl font-bold text-slate-900">{detail.name}</h3>

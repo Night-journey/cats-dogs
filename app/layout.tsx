@@ -1,8 +1,8 @@
 import './globals.css';
-import Link from 'next/link';
 import type { Metadata } from 'next';
 import { getAuthFromCookies } from '@/lib/auth';
-import AuthActions from '@/components/AuthActions';
+import Header from '@/components/Header';
+import BottomNav from '@/components/BottomNav';
 import { query } from '@/lib/db';
 
 export const metadata: Metadata = {
@@ -33,29 +33,14 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     nickname = user.rows[0]?.name;
   }
 
-  const nav = isAdmin ? [...baseNav, ['管理后台', '/admin'] as const] : baseNav;
+  const extraNav: [string, string][] = isAdmin ? [['管理后台', '/admin']] : [];
 
   return (
     <html lang="zh-CN">
       <body>
-        <header className="sticky top-0 z-20 border-b border-amber-100 bg-white/85 backdrop-blur-md">
-          <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-4 px-4 py-3">
-            <h1 className="rounded-full bg-amber-100 px-3 py-1 text-sm font-semibold text-amber-900">🐾 西财猫猫狗狗</h1>
-            <nav className="flex flex-wrap gap-2 text-sm">
-              {nav.map(([label, href]) => (
-                <Link
-                  key={href}
-                  href={href}
-                  className="rounded-full px-3 py-1 text-slate-700 transition hover:bg-amber-100 hover:text-amber-900"
-                >
-                  {label}
-                </Link>
-              ))}
-            </nav>
-            <AuthActions isLoggedIn={isLoggedIn} isAdmin={isAdmin} nickname={nickname} />
-          </div>
-        </header>
-        <main className="mx-auto max-w-6xl px-4 py-8">{children}</main>
+        <Header isLoggedIn={isLoggedIn} isAdmin={isAdmin} nickname={nickname} extraNav={extraNav} />
+        <main className="mx-auto max-w-6xl px-4 py-8 pb-24">{children}</main>
+        <BottomNav />
       </body>
     </html>
   );

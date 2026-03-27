@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 
 type AnimalItem = {
   id: number;
@@ -40,7 +41,16 @@ export default function AnimalCardGrid({ animals }: { animals: AnimalItem[] }) {
           className="group block overflow-hidden rounded-2xl bg-white text-left transition hover:-translate-y-1 hover:shadow-xl"
         >
           {a.avatar_url ? (
-            <img src={a.avatar_url} alt={a.name} className="block aspect-[3/4] w-full rounded-t-2xl object-cover" />
+            <div className="relative aspect-[3/4] w-full overflow-hidden rounded-t-2xl">
+              <Image
+                src={a.avatar_url}
+                alt={a.name}
+                fill
+                className="object-cover"
+                sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                loading="lazy"
+              />
+            </div>
           ) : (
             <div className="block aspect-[3/4] w-full rounded-t-2xl bg-gradient-to-br from-amber-100 to-orange-100" />
           )}

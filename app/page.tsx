@@ -56,16 +56,16 @@ export default async function HomePage() {
           </p>
           <div className="mt-5 flex justify-center gap-4">
             <Link
-              href="/animals"
+              href="/knowledge"
               className="rounded-full bg-amber-500 px-6 py-2.5 font-medium text-white shadow-lg shadow-amber-500/30 hover:bg-amber-600 hover:shadow-xl transition-all hover:-translate-y-0.5"
             >
-              浏览图鉴
+              科普知识
             </Link>
             <Link
-              href="/adoption"
+              href="/about"
               className="rounded-full bg-white border-2 border-amber-200 px-6 py-2.5 font-medium text-amber-700 hover:bg-amber-50 hover:border-amber-300 transition-all hover:-translate-y-0.5"
             >
-              申请领养
+              关于我们
             </Link>
           </div>
         </div>

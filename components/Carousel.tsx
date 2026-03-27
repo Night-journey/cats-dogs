@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 
 interface Slide {
   id: number;
@@ -29,7 +30,7 @@ export default function Carousel({ slides = defaultSlides }: { slides?: Slide[] 
   // 没有动态数据时显示默认欢迎图
   if (!slides || slides.length === 0) {
     return (
-      <div className="relative overflow-hidden rounded-3xl shadow-xl aspect-[21/9] bg-gradient-to-br from-amber-200 via-orange-200 to-rose-200 flex items-center justify-center">
+      <div className="relative overflow-hidden rounded-3xl shadow-xl aspect-video md:aspect-[21/9] bg-gradient-to-br from-amber-200 via-orange-200 to-rose-200 flex items-center justify-center">
         <div className="text-center">
           <div className="text-6xl mb-4">🐾</div>
           <h3 className="text-3xl font-bold text-amber-900">欢迎来到西财猫猫狗狗</h3>
@@ -52,12 +53,15 @@ export default function Carousel({ slides = defaultSlides }: { slides?: Slide[] 
         style={{ transform: `translateX(-${current * 100}%)` }}
       >
         {displaySlides.map((slide) => (
-          <div key={slide.id} className="relative w-full flex-shrink-0 aspect-[21/9]">
+          <div key={slide.id} className="relative w-full flex-shrink-0 aspect-video md:aspect-[21/9]">
             {slide.image ? (
-              <img
+              <Image
                 src={slide.image}
                 alt={slide.name}
-                className="w-full h-full object-cover"
+                fill
+                className="object-cover"
+                sizes="100vw"
+                priority={current === slide.id}
               />
             ) : (
               <div className="w-full h-full bg-gradient-to-br from-amber-200 via-orange-200 to-rose-200 flex items-center justify-center">
